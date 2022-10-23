@@ -1,0 +1,569 @@
+basePath: /v1
+definitions:
+  customer.Address:
+    properties:
+      District:
+        type: string
+      Street:
+        type: string
+    type: object
+  customer.AddressResponse:
+    properties:
+      District:
+        type: string
+      Street:
+        type: string
+      id:
+        type: integer
+    type: object
+  customer.CustomerFullInfo:
+    properties:
+      Adderesses:
+        items:
+          $ref: '#/definitions/customer.AddressResponse'
+        type: array
+      Bio:
+        type: string
+      CreatedAt:
+        type: string
+      DeletedAt:
+        type: string
+      Email:
+        type: string
+      FirstName:
+        type: string
+      Id:
+        type: integer
+      LastName:
+        type: string
+      PhoneNumber:
+        type: string
+      UpdatedAt:
+        type: string
+      posts:
+        items:
+          $ref: '#/definitions/customer.PostResponse'
+        type: array
+      review:
+        items:
+          $ref: '#/definitions/customer.ReviewResp'
+        type: array
+    type: object
+  customer.CustomerRequest:
+    properties:
+      adderesses:
+        items:
+          $ref: '#/definitions/customer.Address'
+        type: array
+      bio:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      phonenumber:
+        type: string
+    type: object
+  customer.CustomerResponse:
+    properties:
+      Adderesses:
+        items:
+          $ref: '#/definitions/customer.AddressResponse'
+        type: array
+      Bio:
+        type: string
+      CreatedAt:
+        type: string
+      DeletedAt:
+        type: string
+      Email:
+        type: string
+      FirstName:
+        type: string
+      Id:
+        type: integer
+      LastName:
+        type: string
+      PhoneNumber:
+        type: string
+      UpdatedAt:
+        type: string
+    type: object
+  customer.CustomerResponsePost:
+    properties:
+      Adderesses:
+        items:
+          $ref: '#/definitions/customer.AddressResponse'
+        type: array
+      Bio:
+        type: string
+      CreatedAt:
+        type: string
+      DeleteAt:
+        type: string
+      Email:
+        type: string
+      FirstName:
+        type: string
+      Id:
+        type: integer
+      LastName:
+        type: string
+      PhoneNumber:
+        type: string
+      Post:
+        items:
+          $ref: '#/definitions/customer.PostResponse'
+        type: array
+      UpdatedAt:
+        type: string
+    type: object
+  customer.ListCustomers:
+    properties:
+      ActiveCustomers:
+        items:
+          $ref: '#/definitions/customer.CustomerFullInfo'
+        type: array
+      DeletedCustomers:
+        items:
+          $ref: '#/definitions/customer.CustomerFullInfo'
+        type: array
+    type: object
+  customer.MediasResponse:
+    properties:
+      Link:
+        type: string
+      Name:
+        type: string
+      PostId:
+        type: integer
+      Type:
+        type: string
+    type: object
+  customer.PostResponse:
+    properties:
+      CreatedAt:
+        type: string
+      DeleteAt:
+        type: string
+      Description:
+        type: string
+      Id:
+        type: integer
+      Media:
+        items:
+          $ref: '#/definitions/customer.MediasResponse'
+        type: array
+      Name:
+        type: string
+      UpdatedAt:
+        type: string
+    type: object
+  customer.ReviewResp:
+    properties:
+      description:
+        type: string
+      post_id:
+        type: integer
+      review:
+        type: integer
+    type: object
+  post.ListAllPostResponse:
+    properties:
+      ActivePost:
+        items:
+          $ref: '#/definitions/post.PostReviewResponse'
+        type: array
+      DeletedPost:
+        items:
+          $ref: '#/definitions/post.PostReviewResponse'
+        type: array
+    type: object
+  post.MediasRequest:
+    properties:
+      Link:
+        type: string
+      Name:
+        type: string
+      Type:
+        type: string
+    type: object
+  post.MediasResponse:
+    properties:
+      Link:
+        type: string
+      Name:
+        type: string
+      PostId:
+        type: integer
+      Type:
+        type: string
+    type: object
+  post.PostRequest:
+    properties:
+      CreatedAt:
+        type: string
+      CustomerId:
+        type: integer
+      Description:
+        type: string
+      Media:
+        items:
+          $ref: '#/definitions/post.MediasRequest'
+        type: array
+      Name:
+        type: string
+      UpdatedAt:
+        type: string
+    type: object
+  post.PostResponse:
+    properties:
+      CreatedAt:
+        type: string
+      CustomerId:
+        type: integer
+      DeleteAt:
+        type: string
+      Description:
+        type: string
+      Id:
+        type: integer
+      Media:
+        items:
+          $ref: '#/definitions/post.MediasResponse'
+        type: array
+      Name:
+        type: string
+      UpdatedAt:
+        type: string
+    type: object
+  post.PostReviewResponse:
+    properties:
+      Count:
+        type: integer
+      CreatedAt:
+        type: string
+      CustomerId:
+        type: integer
+      DeleteAt:
+        type: string
+      Description:
+        type: string
+      Id:
+        type: integer
+      Media:
+        items:
+          $ref: '#/definitions/post.MediasResponse'
+        type: array
+      Name:
+        type: string
+      Review:
+        type: number
+      UpdatedAt:
+        type: string
+    type: object
+  review.Review:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      post_id:
+        type: integer
+      review:
+        type: number
+    type: object
+host: localhost:8070
+info:
+  contact:
+    email: asliddinvstalim@gmail.com
+    name: Asliddin
+    url: https://t.me/asliddindeh
+  description: This is reivew api
+  termsOfService: not much usefull
+  title: Review api
+  version: "1.0"
+paths:
+  /customer:
+    post:
+      consumes:
+      - application/json
+      description: this func create customer with
+      parameters:
+      - description: Customer
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer.CustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/customer.CustomerResponse'
+      summary: create customer with info
+      tags:
+      - customer
+  /customer/{id}:
+    get:
+      consumes:
+      - application/json
+      description: this func get customer with post
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/customer.CustomerResponse'
+      summary: get customer with post
+      tags:
+      - customer
+  /customer/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: this func delete customer
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+      summary: delete customer
+      tags:
+      - customer
+  /customer/list:
+    get:
+      consumes:
+      - application/json
+      description: this func get all customers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/customer.ListCustomers'
+      summary: get all customers
+      tags:
+      - customer
+  /customer/post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: this func get customer with post
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/customer.CustomerResponsePost'
+      summary: get customer with post
+      tags:
+      - customer
+  /customer/update:
+    patch:
+      consumes:
+      - application/json
+      description: this func update customers
+      parameters:
+      - description: Customer
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer.CustomerResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/customer.CustomerResponse'
+      summary: update customers
+      tags:
+      - customer
+  /post:
+    post:
+      consumes:
+      - application/json
+      description: this func create post
+      parameters:
+      - description: Post
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/post.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.PostResponse'
+      summary: create post with info
+      tags:
+      - post
+  /post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: this func get post
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+      summary: get post
+      tags:
+      - post
+  /post/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: this func delete post
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+      summary: delete post
+      tags:
+      - post
+  /post/list:
+    get:
+      consumes:
+      - application/json
+      description: this func get posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.ListAllPostResponse'
+      summary: get posts
+      tags:
+      - post
+  /post/update:
+    patch:
+      consumes:
+      - application/json
+      description: this func update post
+      parameters:
+      - description: Post
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/post.PostResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.PostResponse'
+      summary: update post
+      tags:
+      - post
+  /review:
+    post:
+      consumes:
+      - application/json
+      description: this func create review
+      parameters:
+      - description: Review
+        in: body
+        name: review
+        required: true
+        schema:
+          $ref: '#/definitions/review.Review'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/review.Review'
+      summary: create review
+      tags:
+      - review
+  /review/{id}:
+    get:
+      consumes:
+      - application/json
+      description: this func get post review
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+      summary: get review
+      tags:
+      - review
+  /review/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: this func delete review
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+      summary: delete review
+      tags:
+      - review
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
