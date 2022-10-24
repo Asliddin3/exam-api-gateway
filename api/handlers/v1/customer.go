@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
