@@ -312,7 +312,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: this func get customer with post
+      description: this func get customer info
       parameters:
       - description: id
         in: path
@@ -326,7 +326,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/customer.CustomerResponse'
-      summary: get customer with post
+      summary: get customer info
       tags:
       - customer
   /customer/delete/{id}:

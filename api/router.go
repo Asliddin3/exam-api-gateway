@@ -48,19 +48,20 @@ func New(option Option) *gin.Engine {
 	// Customer routers
 	api.POST("/customer", handlerV1.CreateCustomer)
 	api.GET("/customer/list", handlerV1.GetListCustomers)
-	api.PATCH("/customer/update",handlerV1.UpdateCustomer)
-	api.DELETE("/customer/delete/:id",handlerV1.DeleteCustomer)
-	api.GET("/customer/post/:id",handlerV1.GetCustomerPostById)
+	api.PATCH("/customer/update", handlerV1.UpdateCustomer)
+	api.DELETE("/customer/delete/:id", handlerV1.DeleteCustomer)
+	api.GET("/customer/post/:id", handlerV1.GetCustomerPostById)
+	api.GET("/customer/:id", handlerV1.GetCustomerInfo)
 	// Post routers
 	api.GET("/post/:id", handlerV1.GetPost)
 	api.POST("/post", handlerV1.CreatePost)
-	api.PATCH("/post/update",handlerV1.UpdatePost)
-	api.DELETE("/post/delete/:id",handlerV1.DeletePost)
-	api.GET("/post/list",handlerV1.GetListPosts)
+	api.PATCH("/post/update", handlerV1.UpdatePost)
+	api.DELETE("/post/delete/:id", handlerV1.DeletePost)
+	api.GET("/post/list", handlerV1.GetListPosts)
 	// review routers
 	api.GET("/review/:id", handlerV1.GetPostReview)
-	api.POST("/review",handlerV1.CreateReview)
-	api.DELETE("/review/delete/:id",handlerV1.DeleteReview)
+	api.POST("/review", handlerV1.CreateReview)
+	api.DELETE("/review/delete/:id", handlerV1.DeleteReview)
 
 	url := ginSwagger.URL("swagger/doc.json")
 	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))

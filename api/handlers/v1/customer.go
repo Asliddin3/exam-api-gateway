@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -123,6 +124,7 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @BasePath /api/v1
 // @Summary get all customers
 // @Description this func get all customers
 // @Tags customer
@@ -148,6 +150,7 @@ func (h *handlerV1) GetListCustomers(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @BasePath /api/v1
 // @Summary get customer with post
 // @Description this func get customer with post
 // @Tags customer
@@ -185,7 +188,9 @@ func (h *handlerV1) GetCustomerPostById(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary get customer with post
+// @BasePath /api/v1
+
+// @Summary get customer info
 // @Description this func get customer info
 // @Tags customer
 // @Accept json

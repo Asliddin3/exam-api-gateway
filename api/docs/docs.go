@@ -175,7 +175,7 @@ const docTemplate = `{
         },
         "/customer/{id}": {
             "get": {
-                "description": "this func get customer with post",
+                "description": "this func get customer info",
                 "consumes": [
                     "application/json"
                 ],
@@ -185,7 +185,7 @@ const docTemplate = `{
                 "tags": [
                     "customer"
                 ],
-                "summary": "get customer with post",
+                "summary": "get customer info",
                 "parameters": [
                     {
                         "type": "integer",
