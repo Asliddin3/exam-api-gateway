@@ -135,6 +135,7 @@ func (h *handlerV1) GetListCustomers(c *gin.Context) {
 	var (
 		jspbMarshal protojson.MarshalOptions
 	)
+
 	jspbMarshal.UseProtoNames = true
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
