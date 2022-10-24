@@ -13,43 +13,43 @@ import (
 	l "github.com/Asliddin3/exam-api-gateway/pkg/logger"
 )
 
-// @BasePath /api/v1
-// @Summary get review
-// @Description this func get post review
-// @Tags review
-// @Accept json
-// @Produce json
-// @Param id path int true "id"
-// @Success 200 "success"
-// @Router /review/{id} [get]
-func (h *handlerV1) GetPostReview(c *gin.Context) {
-	var jspbMarshal protojson.MarshalOptions
-	jspbMarshal.UseProtoNames = true
+// // @BasePath /api/v1
+// // @Summary get review
+// // @Description this func get post review
+// // @Tags review
+// // @Accept json
+// // @Produce json
+// // @Param id path int true "id"
+// // @Success 200 "success"
+// // @Router /review/{id} [get]
+// func (h *handlerV1) GetPostReview(c *gin.Context) {
+// 	var jspbMarshal protojson.MarshalOptions
+// 	jspbMarshal.UseProtoNames = true
 
-	guid := c.Param("id")
-	id, err := strconv.ParseInt(guid, 10, 64)
-	body := &review.PostId{
-		Id: id,
-	}
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("failed to bind json", l.Error(err))
-		return
-	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
-	response, err := h.serviceManager.ReviewService().GetPostReview(ctx, body)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("failed to get post review", l.Error(err))
-		return
-	}
-	c.JSON(http.StatusOK, response)
-}
+// 	guid := c.Param("id")
+// 	id, err := strconv.ParseInt(guid, 10, 64)
+// 	body := &review.PostId{
+// 		Id: id,
+// 	}
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		h.log.Error("failed to bind json", l.Error(err))
+// 		return
+// 	}
+// 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+// 	defer cancel()
+// 	response, err := h.serviceManager.ReviewService().GetPostOverall(ctx, body)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		h.log.Error("failed to get post review", l.Error(err))
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, response)
+// }
 
 // @BasePath /api/v1
 // @Summary delete review
@@ -100,7 +100,7 @@ func (h *handlerV1) DeleteReview(c *gin.Context) {
 // @Router /review [post]
 func (h *handlerV1) CreateReview(c *gin.Context) {
 	var (
-		body        review.Review
+		body        review.ReviewRequest
 		jspbMarshal protojson.MarshalOptions
 	)
 	jspbMarshal.UseProtoNames = true
@@ -123,4 +123,41 @@ func (h *handlerV1) CreateReview(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, response)
+}
+
+//@Summary get review by id
+//@Description this func get review by id
+//@Tags review
+//@Accept json
+//@Produce json
+//@Param id path int true "id"
+//@Success 200 {object} review.Review
+//@Router /review/{id} [get]
+func (h *handlerV1) GetReviewById(c *gin.Context) {
+	var jspbMarshal protojson.MarshalOptions
+	jspbMarshal.UseProtoNames = true
+
+	idReq := c.Param("id")
+	id, err := strconv.ParseInt(idReq, 10, 64)
+	body := &review.ReviewId{
+		Id: id,
+	}
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to convert int to string", l.Error(err))
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+	response, err := h.serviceManager.ReviewService().GetReviewById(ctx, body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to get review", l.Error(err))
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }

@@ -59,7 +59,7 @@ func New(option Option) *gin.Engine {
 	api.DELETE("/post/delete/:id", handlerV1.DeletePost)
 	api.GET("/post/list", handlerV1.GetListPosts)
 	// review routers
-	api.GET("/review/:id", handlerV1.GetPostReview)
+	api.GET("/review/:id", handlerV1.GetReviewById)
 	api.POST("/review", handlerV1.CreateReview)
 	api.DELETE("/review/delete/:id", handlerV1.DeleteReview)
 
