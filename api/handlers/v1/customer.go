@@ -82,7 +82,7 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 		h.log.Error("failed to update customer", l.Error(err))
 		return
 	}
-	c.JSON(http.StatusCreated, response)
+	c.JSON(http.StatusOK, response)
 }
 
 // @BasePath /api/v1
@@ -186,7 +186,7 @@ func (h *handlerV1) GetCustomerPostById(c *gin.Context) {
 }
 
 // @Summary get customer with post
-// @Description this func get customer with post
+// @Description this func get customer info
 // @Tags customer
 // @Accept json
 // @Produce json
