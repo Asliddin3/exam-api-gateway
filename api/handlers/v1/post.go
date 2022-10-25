@@ -20,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param id path int true "id"
-// @Success 200 "success"
+// @Success 200 {object} post.PostResponseCustomer
 // @Router /post/{id} [get]
 func (h *handlerV1) GetPost(c *gin.Context) {
 	var jspbMarshal protojson.MarshalOptions
@@ -35,7 +35,7 @@ func (h *handlerV1) GetPost(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to bind json", l.Error(err))
+		h.log.Error("failed to convert string to int", l.Error(err))
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
@@ -50,7 +50,6 @@ func (h *handlerV1) GetPost(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, response)
 }
-
 
 // @BasePath /api/v1
 // @Summary get posts
@@ -67,7 +66,7 @@ func (h *handlerV1) GetListPosts(c *gin.Context) {
 	jspbMarshal.UseProtoNames = true
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
-	response, err := h.serviceManager.PostService().GetListPosts(ctx,&post.Empty{})
+	response, err := h.serviceManager.PostService().GetListPosts(ctx, &post.Empty{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -100,7 +99,7 @@ func (h *handlerV1) DeletePost(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to bind json", l.Error(err))
+		h.log.Error("failed to convert string to int", l.Error(err))
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
@@ -122,12 +121,12 @@ func (h *handlerV1) DeletePost(c *gin.Context) {
 // @Tags post
 // @Accept json
 // @Produce json
-// @Param post body post.PostResponse true "Post"
+// @Param post body post.PostUpdate true "Post"
 // @Success 200 {object} post.PostResponse
 // @Router /post/update [patch]
 func (h *handlerV1) UpdatePost(c *gin.Context) {
 	var (
-		body        post.PostResponse
+		body        post.PostUpdate
 		jspbMarshal protojson.MarshalOptions
 	)
 	jspbMarshal.UseProtoNames = true
@@ -161,7 +160,7 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param customer body post.PostRequest true "Post"
-// @Success 200 {object} post.PostResponse
+// @Success 201 {object} post.PostResponse
 // @Router /post [post]
 func (h *handlerV1) CreatePost(c *gin.Context) {
 	var (

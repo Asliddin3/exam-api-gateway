@@ -13,44 +13,6 @@ import (
 	l "github.com/Asliddin3/exam-api-gateway/pkg/logger"
 )
 
-// // @BasePath /api/v1
-// // @Summary get review
-// // @Description this func get post review
-// // @Tags review
-// // @Accept json
-// // @Produce json
-// // @Param id path int true "id"
-// // @Success 200 "success"
-// // @Router /review/{id} [get]
-// func (h *handlerV1) GetPostReview(c *gin.Context) {
-// 	var jspbMarshal protojson.MarshalOptions
-// 	jspbMarshal.UseProtoNames = true
-
-// 	guid := c.Param("id")
-// 	id, err := strconv.ParseInt(guid, 10, 64)
-// 	body := &review.PostId{
-// 		Id: id,
-// 	}
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		h.log.Error("failed to bind json", l.Error(err))
-// 		return
-// 	}
-// 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-// 	defer cancel()
-// 	response, err := h.serviceManager.ReviewService().GetPostOverall(ctx, body)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		h.log.Error("failed to get post review", l.Error(err))
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, response)
-// }
-
 // @BasePath /api/v1
 // @Summary delete review
 // @Description this func delete review
@@ -66,7 +28,7 @@ func (h *handlerV1) DeleteReview(c *gin.Context) {
 
 	guid := c.Param("id")
 	id, err := strconv.ParseInt(guid, 10, 64)
-	body := &review.PostId{
+	body := &review.ReviewId{
 		Id: id,
 	}
 	if err != nil {
@@ -80,7 +42,7 @@ func (h *handlerV1) DeleteReview(c *gin.Context) {
 	defer cancel()
 	response, err := h.serviceManager.ReviewService().DeleteReview(ctx, body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		h.log.Error("failed to delete review", l.Error(err))
@@ -95,7 +57,7 @@ func (h *handlerV1) DeleteReview(c *gin.Context) {
 // @Tags review
 // @Accept json
 // @Produce json
-// @Param review body review.Review true "Review"
+// @Param review body review.ReviewRequest true "Review"
 // @Success 200 {object} review.Review
 // @Router /review [post]
 func (h *handlerV1) CreateReview(c *gin.Context) {
@@ -115,8 +77,15 @@ func (h *handlerV1) CreateReview(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	response, err := h.serviceManager.ReviewService().CreateReview(ctx, &body)
+	if response.Id == 0 && response.PostId == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"info": "this review alreadi exists",
+		})
+		h.log.Error("failed to create review cause of exists review", l.Error(err))
+		return
+	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		h.log.Error("failed to create review", l.Error(err))

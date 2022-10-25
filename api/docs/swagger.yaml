@@ -38,32 +38,32 @@ definitions:
         type: string
       PhoneNumber:
         type: string
-      UpdatedAt:
-        type: string
-      posts:
+      Posts:
         items:
           $ref: '#/definitions/customer.PostResponse'
         type: array
-      review:
+      Reviews:
         items:
-          $ref: '#/definitions/customer.ReviewResp'
+          $ref: '#/definitions/customer.ReviewList'
         type: array
+      UpdatedAt:
+        type: string
     type: object
   customer.CustomerRequest:
     properties:
-      adderesses:
+      Adderesses:
         items:
           $ref: '#/definitions/customer.Address'
         type: array
-      bio:
+      Bio:
         type: string
-      email:
+      Email:
         type: string
-      firstname:
+      FirstName:
         type: string
-      lastname:
+      LastName:
         type: string
-      phonenumber:
+      PhoneNumber:
         type: string
     type: object
   customer.CustomerResponse:
@@ -75,8 +75,6 @@ definitions:
       Bio:
         type: string
       CreatedAt:
-        type: string
-      DeletedAt:
         type: string
       Email:
         type: string
@@ -101,8 +99,6 @@ definitions:
         type: string
       CreatedAt:
         type: string
-      DeleteAt:
-        type: string
       Email:
         type: string
       FirstName:
@@ -120,6 +116,25 @@ definitions:
       UpdatedAt:
         type: string
     type: object
+  customer.CustomerUpdate:
+    properties:
+      Adderesses:
+        items:
+          $ref: '#/definitions/customer.AddressResponse'
+        type: array
+      Bio:
+        type: string
+      Email:
+        type: string
+      FirstName:
+        type: string
+      Id:
+        type: integer
+      LastName:
+        type: string
+      PhoneNumber:
+        type: string
+    type: object
   customer.ListCustomers:
     properties:
       ActiveCustomers:
@@ -133,20 +148,18 @@ definitions:
     type: object
   customer.MediasResponse:
     properties:
+      Id:
+        type: integer
       Link:
         type: string
       Name:
         type: string
-      PostId:
-        type: integer
       Type:
         type: string
     type: object
   customer.PostResponse:
     properties:
       CreatedAt:
-        type: string
-      DeleteAt:
         type: string
       Description:
         type: string
@@ -161,13 +174,24 @@ definitions:
       UpdatedAt:
         type: string
     type: object
-  customer.ReviewResp:
+  customer.ReviewList:
     properties:
       description:
         type: string
+      id:
+        type: integer
       post_id:
         type: integer
       review:
+        type: number
+    type: object
+  post.AddressResponse:
+    properties:
+      District:
+        type: string
+      Street:
+        type: string
+      id:
         type: integer
     type: object
   post.ListAllPostResponse:
@@ -196,15 +220,13 @@ definitions:
         type: string
       Name:
         type: string
-      PostId:
-        type: integer
       Type:
         type: string
+      id:
+        type: integer
     type: object
   post.PostRequest:
     properties:
-      CreatedAt:
-        type: string
       CustomerId:
         type: integer
       Description:
@@ -215,8 +237,6 @@ definitions:
         type: array
       Name:
         type: string
-      UpdatedAt:
-        type: string
     type: object
   post.PostResponse:
     properties:
@@ -224,8 +244,6 @@ definitions:
         type: string
       CustomerId:
         type: integer
-      DeleteAt:
-        type: string
       Description:
         type: string
       Id:
@@ -238,6 +256,43 @@ definitions:
         type: string
       UpdatedAt:
         type: string
+    type: object
+  post.PostResponseCustomer:
+    properties:
+      Bio:
+        type: string
+      CreatedAt:
+        type: string
+      CustomerId:
+        type: integer
+      Description:
+        type: string
+      FirstName:
+        type: string
+      Id:
+        type: integer
+      LastName:
+        type: string
+      Media:
+        items:
+          $ref: '#/definitions/post.MediasResponse'
+        type: array
+      Name:
+        type: string
+      UpdatedAt:
+        type: string
+      adderesses:
+        items:
+          $ref: '#/definitions/post.AddressResponse'
+        type: array
+      email:
+        type: string
+      phonenumber:
+        type: string
+      reviews:
+        items:
+          $ref: '#/definitions/post.ReviewRespList'
+        type: array
     type: object
   post.PostReviewResponse:
     properties:
@@ -247,7 +302,7 @@ definitions:
         type: string
       CustomerId:
         type: integer
-      DeleteAt:
+      DeletedAt:
         type: string
       Description:
         type: string
@@ -259,12 +314,59 @@ definitions:
         type: array
       Name:
         type: string
-      Review:
+      Overall:
         type: number
       UpdatedAt:
         type: string
+      reviews:
+        items:
+          $ref: '#/definitions/post.ReviewRespList'
+        type: array
+    type: object
+  post.PostUpdate:
+    properties:
+      CustomerId:
+        type: integer
+      Description:
+        type: string
+      Id:
+        type: integer
+      Media:
+        items:
+          $ref: '#/definitions/post.MediasResponse'
+        type: array
+      Name:
+        type: string
+    type: object
+  post.ReviewRespList:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      review:
+        type: number
     type: object
   review.Review:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      post_id:
+        type: integer
+      review:
+        type: number
+    type: object
+  review.ReviewRequest:
     properties:
       customer_id:
         type: integer
@@ -301,8 +403,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/customer.CustomerResponse'
       summary: create customer with info
@@ -395,7 +497,7 @@ paths:
         name: customer
         required: true
         schema:
-          $ref: '#/definitions/customer.CustomerResponse'
+          $ref: '#/definitions/customer.CustomerUpdate'
       produces:
       - application/json
       responses:
@@ -421,8 +523,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/post.PostResponse'
       summary: create post with info
@@ -443,7 +545,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: success
+          description: OK
+          schema:
+            $ref: '#/definitions/post.PostResponseCustomer'
       summary: get post
       tags:
       - post
@@ -492,7 +596,7 @@ paths:
         name: post
         required: true
         schema:
-          $ref: '#/definitions/post.PostResponse'
+          $ref: '#/definitions/post.PostUpdate'
       produces:
       - application/json
       responses:
@@ -514,7 +618,7 @@ paths:
         name: review
         required: true
         schema:
-          $ref: '#/definitions/review.Review'
+          $ref: '#/definitions/review.ReviewRequest'
       produces:
       - application/json
       responses:
@@ -529,7 +633,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: this func get post review
+      description: this func get review by id
       parameters:
       - description: id
         in: path
@@ -540,8 +644,10 @@ paths:
       - application/json
       responses:
         "200":
-          description: success
-      summary: get review
+          description: OK
+          schema:
+            $ref: '#/definitions/review.Review'
+      summary: get review by id
       tags:
       - review
   /review/delete/{id}:

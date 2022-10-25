@@ -21,7 +21,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param customer body customer.CustomerRequest true "Customer"
-// @Success 200 {object} customer.CustomerResponse
+// @Success 201 {object} customer.CustomerResponse
 // @Router /customer [post]
 func (h *handlerV1) CreateCustomer(c *gin.Context) {
 	var (
@@ -40,6 +40,7 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, &body)
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -55,12 +56,12 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 // @Tags customer
 // @Accept json
 // @Produce json
-// @Param customer body customer.CustomerResponse true "Customer"
+// @Param customer body customer.CustomerUpdate true "Customer"
 // @Success 200 {object} customer.CustomerResponse
 // @Router /customer/update [patch]
 func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 	var (
-		body        customer.CustomerResponse
+		body        customer.CustomerUpdate
 		jspbMarshal protojson.MarshalOptions
 	)
 	jspbMarshal.UseProtoNames = true
@@ -107,7 +108,7 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to bind json", l.Error(err))
+		h.log.Error("failed to convert string to int", l.Error(err))
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
@@ -132,11 +133,7 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 // @Success 200 {object} customer.ListCustomers
 // @Router /customer/list [get]
 func (h *handlerV1) GetListCustomers(c *gin.Context) {
-	var (
-		jspbMarshal protojson.MarshalOptions
-	)
 
-	jspbMarshal.UseProtoNames = true
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	response, err := h.serviceManager.CustomerService().GetListCustomers(ctx, &customer.Empty{})
@@ -172,7 +169,7 @@ func (h *handlerV1) GetCustomerPostById(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to bind json", l.Error(err))
+		h.log.Error("failed to convert string to int", l.Error(err))
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))

@@ -46,8 +46,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/customer.CustomerResponse"
                         }
@@ -159,7 +159,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/customer.CustomerResponse"
+                            "$ref": "#/definitions/customer.CustomerUpdate"
                         }
                     }
                 ],
@@ -230,8 +230,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/post.PostResponse"
                         }
@@ -311,7 +311,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/post.PostResponse"
+                            "$ref": "#/definitions/post.PostUpdate"
                         }
                     }
                 ],
@@ -349,7 +349,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "success"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/post.PostResponseCustomer"
+                        }
                     }
                 }
             }
@@ -374,7 +377,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/review.Review"
+                            "$ref": "#/definitions/review.ReviewRequest"
                         }
                     }
                 ],
@@ -419,7 +422,7 @@ const docTemplate = `{
         },
         "/review/{id}": {
             "get": {
-                "description": "this func get post review",
+                "description": "this func get review by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -429,7 +432,7 @@ const docTemplate = `{
                 "tags": [
                     "review"
                 ],
-                "summary": "get review",
+                "summary": "get review by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -441,7 +444,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "success"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/review.Review"
+                        }
                     }
                 }
             }
@@ -506,45 +512,45 @@ const docTemplate = `{
                 "PhoneNumber": {
                     "type": "string"
                 },
-                "UpdatedAt": {
-                    "type": "string"
-                },
-                "posts": {
+                "Posts": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/customer.PostResponse"
                     }
                 },
-                "review": {
+                "Reviews": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/customer.ReviewResp"
+                        "$ref": "#/definitions/customer.ReviewList"
                     }
+                },
+                "UpdatedAt": {
+                    "type": "string"
                 }
             }
         },
         "customer.CustomerRequest": {
             "type": "object",
             "properties": {
-                "adderesses": {
+                "Adderesses": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/customer.Address"
                     }
                 },
-                "bio": {
+                "Bio": {
                     "type": "string"
                 },
-                "email": {
+                "Email": {
                     "type": "string"
                 },
-                "firstname": {
+                "FirstName": {
                     "type": "string"
                 },
-                "lastname": {
+                "LastName": {
                     "type": "string"
                 },
-                "phonenumber": {
+                "PhoneNumber": {
                     "type": "string"
                 }
             }
@@ -562,9 +568,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "CreatedAt": {
-                    "type": "string"
-                },
-                "DeletedAt": {
                     "type": "string"
                 },
                 "Email": {
@@ -602,9 +605,6 @@ const docTemplate = `{
                 "CreatedAt": {
                     "type": "string"
                 },
-                "DeleteAt": {
-                    "type": "string"
-                },
                 "Email": {
                     "type": "string"
                 },
@@ -631,6 +631,35 @@ const docTemplate = `{
                 }
             }
         },
+        "customer.CustomerUpdate": {
+            "type": "object",
+            "properties": {
+                "Adderesses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/customer.AddressResponse"
+                    }
+                },
+                "Bio": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer"
+                },
+                "LastName": {
+                    "type": "string"
+                },
+                "PhoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
         "customer.ListCustomers": {
             "type": "object",
             "properties": {
@@ -651,14 +680,14 @@ const docTemplate = `{
         "customer.MediasResponse": {
             "type": "object",
             "properties": {
+                "Id": {
+                    "type": "integer"
+                },
                 "Link": {
                     "type": "string"
                 },
                 "Name": {
                     "type": "string"
-                },
-                "PostId": {
-                    "type": "integer"
                 },
                 "Type": {
                     "type": "string"
@@ -669,9 +698,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "CreatedAt": {
-                    "type": "string"
-                },
-                "DeleteAt": {
                     "type": "string"
                 },
                 "Description": {
@@ -694,16 +720,33 @@ const docTemplate = `{
                 }
             }
         },
-        "customer.ReviewResp": {
+        "customer.ReviewList": {
             "type": "object",
             "properties": {
                 "description": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "post_id": {
                     "type": "integer"
                 },
                 "review": {
+                    "type": "number"
+                }
+            }
+        },
+        "post.AddressResponse": {
+            "type": "object",
+            "properties": {
+                "District": {
+                    "type": "string"
+                },
+                "Street": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "integer"
                 }
             }
@@ -748,20 +791,17 @@ const docTemplate = `{
                 "Name": {
                     "type": "string"
                 },
-                "PostId": {
-                    "type": "integer"
-                },
                 "Type": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },
         "post.PostRequest": {
             "type": "object",
             "properties": {
-                "CreatedAt": {
-                    "type": "string"
-                },
                 "CustomerId": {
                     "type": "integer"
                 },
@@ -776,9 +816,6 @@ const docTemplate = `{
                 },
                 "Name": {
                     "type": "string"
-                },
-                "UpdatedAt": {
-                    "type": "string"
                 }
             }
         },
@@ -790,9 +827,6 @@ const docTemplate = `{
                 },
                 "CustomerId": {
                     "type": "integer"
-                },
-                "DeleteAt": {
-                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -811,6 +845,62 @@ const docTemplate = `{
                 },
                 "UpdatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "post.PostResponseCustomer": {
+            "type": "object",
+            "properties": {
+                "Bio": {
+                    "type": "string"
+                },
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "CustomerId": {
+                    "type": "integer"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer"
+                },
+                "LastName": {
+                    "type": "string"
+                },
+                "Media": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/post.MediasResponse"
+                    }
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "UpdatedAt": {
+                    "type": "string"
+                },
+                "adderesses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/post.AddressResponse"
+                    }
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phonenumber": {
+                    "type": "string"
+                },
+                "reviews": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/post.ReviewRespList"
+                    }
                 }
             }
         },
@@ -826,7 +916,7 @@ const docTemplate = `{
                 "CustomerId": {
                     "type": "integer"
                 },
-                "DeleteAt": {
+                "DeletedAt": {
                     "type": "string"
                 },
                 "Description": {
@@ -844,15 +934,87 @@ const docTemplate = `{
                 "Name": {
                     "type": "string"
                 },
-                "Review": {
+                "Overall": {
                     "type": "number"
                 },
                 "UpdatedAt": {
                     "type": "string"
+                },
+                "reviews": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/post.ReviewRespList"
+                    }
+                }
+            }
+        },
+        "post.PostUpdate": {
+            "type": "object",
+            "properties": {
+                "CustomerId": {
+                    "type": "integer"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer"
+                },
+                "Media": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/post.MediasResponse"
+                    }
+                },
+                "Name": {
+                    "type": "string"
+                }
+            }
+        },
+        "post.ReviewRespList": {
+            "type": "object",
+            "properties": {
+                "customer_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "review": {
+                    "type": "number"
                 }
             }
         },
         "review.Review": {
+            "type": "object",
+            "properties": {
+                "customer_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "post_id": {
+                    "type": "integer"
+                },
+                "review": {
+                    "type": "number"
+                }
+            }
+        },
+        "review.ReviewRequest": {
             "type": "object",
             "properties": {
                 "customer_id": {
