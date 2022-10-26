@@ -1,6 +1,9 @@
 package redis
 
 import (
+	"context"
+	"time"
+
 	"github.com/Asliddin3/exam-api-gateway/storage/repo"
 	"github.com/gomodule/redigo/redis"
 )
@@ -13,6 +16,22 @@ func NewRedisRepo(rds *redis.Pool) repo.RedisRepo {
 	return &redisRepo{
 		rds: rds,
 	}
+}
+func (r *redisRepo) Set(key, value string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(3))
+	defer cancel()
+	conn := r.rds.Get()
+	_, err := conn.Do("SET", ctx, key, value, 0)
+	if err != nil {
+		return err
+	}
+	// // st := r.rds.Set(ctx, key, value, 0)
+	// if st.Err() != nil {
+	// 	logger.Error(st.Err())
+	// 	return st.Err()
+	// }
+
+	return nil
 }
 
 func (r *redisRepo) SetWithTTL(key, value string, seconds int) error {
