@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/Asliddin3/exam-api-gateway/storage/repo"
@@ -25,11 +26,6 @@ func (r *redisRepo) Set(key, value string) error {
 	if err != nil {
 		return err
 	}
-	// // st := r.rds.Set(ctx, key, value, 0)
-	// if st.Err() != nil {
-	// 	logger.Error(st.Err())
-	// 	return st.Err()
-	// }
 
 	return nil
 }
@@ -43,6 +39,7 @@ func (r *redisRepo) SetWithTTL(key, value string, seconds int) error {
 }
 
 func (r *redisRepo) Get(key string) (interface{}, error) {
+	fmt.Println(key)
 	conn := r.rds.Get()
 	defer conn.Close()
 	return conn.Do("GET", key)

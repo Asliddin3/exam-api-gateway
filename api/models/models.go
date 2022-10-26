@@ -34,7 +34,7 @@ type User struct {
 }
 
 type VerifiedResponse struct {
-	Id           string `json:"id"`
+	Id           int64 `json:"id"`
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }

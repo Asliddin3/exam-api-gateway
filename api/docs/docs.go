@@ -21,6 +21,39 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/confirm": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register for authentication",
+                "parameters": [
+                    {
+                        "description": "login",
+                        "name": "userData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.CofirmEmail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.VerifiedResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/customer": {
             "post": {
                 "description": "this func create customer with",
@@ -357,6 +390,36 @@ const docTemplate = `{
                 }
             }
         },
+        "/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register for authentication",
+                "parameters": [
+                    {
+                        "description": "user data",
+                        "name": "userData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Register"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success"
+                    }
+                }
+            }
+        },
         "/review": {
             "post": {
                 "description": "this func create review",
@@ -532,6 +595,9 @@ const docTemplate = `{
         "customer.CustomerRequest": {
             "type": "object",
             "properties": {
+                "AccessToken": {
+                    "type": "string"
+                },
                 "Adderesses": {
                     "type": "array",
                     "items": {
@@ -550,7 +616,16 @@ const docTemplate = `{
                 "LastName": {
                     "type": "string"
                 },
+                "PassWord": {
+                    "type": "string"
+                },
                 "PhoneNumber": {
+                    "type": "string"
+                },
+                "RefreshToken": {
+                    "type": "string"
+                },
+                "UserName": {
                     "type": "string"
                 }
             }
@@ -734,6 +809,40 @@ const docTemplate = `{
                 },
                 "review": {
                     "type": "number"
+                }
+            }
+        },
+        "models.Register": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.VerifiedResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
@@ -1028,6 +1137,17 @@ const docTemplate = `{
                 },
                 "review": {
                     "type": "number"
+                }
+            }
+        },
+        "v1.CofirmEmail": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "userNameOrEmail": {
+                    "type": "string"
                 }
             }
         }

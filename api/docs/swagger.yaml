@@ -51,6 +51,8 @@ definitions:
     type: object
   customer.CustomerRequest:
     properties:
+      AccessToken:
+        type: string
       Adderesses:
         items:
           $ref: '#/definitions/customer.Address'
@@ -63,7 +65,13 @@ definitions:
         type: string
       LastName:
         type: string
+      PassWord:
+        type: string
       PhoneNumber:
+        type: string
+      RefreshToken:
+        type: string
+      UserName:
         type: string
     type: object
   customer.CustomerResponse:
@@ -184,6 +192,28 @@ definitions:
         type: integer
       review:
         type: number
+    type: object
+  models.Register:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.VerifiedResponse:
+    properties:
+      access_token:
+        type: string
+      id:
+        type: integer
+      refresh_token:
+        type: string
     type: object
   post.AddressResponse:
     properties:
@@ -377,6 +407,13 @@ definitions:
       review:
         type: number
     type: object
+  v1.CofirmEmail:
+    properties:
+      password:
+        type: string
+      userNameOrEmail:
+        type: string
+    type: object
 host: localhost:8070
 info:
   contact:
@@ -388,6 +425,27 @@ info:
   title: Review api
   version: "1.0"
 paths:
+  /confirm:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: login
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/v1.CofirmEmail'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.VerifiedResponse'
+      summary: Register for authentication
+      tags:
+      - Auth
   /customer:
     post:
       consumes:
@@ -607,6 +665,25 @@ paths:
       summary: update post
       tags:
       - post
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user data
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/models.Register'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success
+      summary: Register for authentication
+      tags:
+      - Auth
   /review:
     post:
       consumes:

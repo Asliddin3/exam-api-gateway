@@ -6,6 +6,7 @@ import (
 	"github.com/Asliddin3/exam-api-gateway/config"
 	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	"github.com/Asliddin3/exam-api-gateway/services"
+	"github.com/Asliddin3/exam-api-gateway/storage/repo"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -16,6 +17,7 @@ type Option struct {
 	Conf           config.Config
 	Logger         logger.Logger
 	ServiceManager services.IServiceManager
+	Redis          repo.RedisRepo
 }
 
 // New ...
@@ -42,6 +44,7 @@ func New(option Option) *gin.Engine {
 		Logger:         option.Logger,
 		ServiceManager: option.ServiceManager,
 		Cfg:            option.Conf,
+		Redis:          option.Redis,
 	})
 
 	api := router.Group("/v1")
@@ -62,6 +65,9 @@ func New(option Option) *gin.Engine {
 	api.GET("/review/:id", handlerV1.GetReviewById)
 	api.POST("/review", handlerV1.CreateReview)
 	api.DELETE("/review/delete/:id", handlerV1.DeleteReview)
+	api.POST("/register", handlerV1.Register)
+	api.POST("/confirm", handlerV1.GetVerification)
+	// register customer
 
 	url := ginSwagger.URL("swagger/doc.json")
 	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
