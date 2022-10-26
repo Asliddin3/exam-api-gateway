@@ -5,7 +5,9 @@ import (
 	"github.com/Asliddin3/exam-api-gateway/config"
 	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	"github.com/Asliddin3/exam-api-gateway/services"
-	// "github.com/Asliddin3/exam-api-gateway/storage/redis"
+
+	r "github.com/Asliddin3/exam-api-gateway/storage/redis"
+	"github.com/gomodule/redigo/redis"
 )
 
 func main() {
@@ -16,11 +18,17 @@ func main() {
 	if err != nil {
 		log.Error("gRPC dial error", logger.Error(err))
 	}
-
+	pool := &redis.Pool{
+		MaxIdle: 10,
+		Dial: func() (redis.Conn, error) {
+			return redis.Dial("tcp", "localhost:6379")
+		},
+	}
 	server := api.New(api.Option{
 		Conf:           cfg,
 		Logger:         log,
 		ServiceManager: serviceManager,
+		Redis:          r.NewRedisRepo(pool),
 	})
 
 	if err := server.Run(cfg.HTTPPort); err != nil {

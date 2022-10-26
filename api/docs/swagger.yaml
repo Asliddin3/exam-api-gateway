@@ -193,17 +193,39 @@ definitions:
       review:
         type: number
     type: object
-  models.Register:
+  models.Address:
     properties:
-      email:
+      District:
         type: string
-      first_name:
+      Street:
         type: string
-      last_name:
-        type: string
+    type: object
+  models.CofirmEmail:
+    properties:
       password:
         type: string
-      username:
+      userNameOrEmail:
+        type: string
+    type: object
+  models.Register:
+    properties:
+      Adderesses:
+        items:
+          $ref: '#/definitions/models.Address'
+        type: array
+      Bio:
+        type: string
+      Email:
+        type: string
+      FirstName:
+        type: string
+      LastName:
+        type: string
+      PassWord:
+        type: string
+      PhoneNumber:
+        type: string
+      UserName:
         type: string
     type: object
   models.VerifiedResponse:
@@ -407,13 +429,6 @@ definitions:
       review:
         type: number
     type: object
-  v1.CofirmEmail:
-    properties:
-      password:
-        type: string
-      userNameOrEmail:
-        type: string
-    type: object
 host: localhost:8070
 info:
   contact:
@@ -435,7 +450,7 @@ paths:
         name: userData
         required: true
         schema:
-          $ref: '#/definitions/v1.CofirmEmail'
+          $ref: '#/definitions/models.CofirmEmail'
       produces:
       - application/json
       responses:

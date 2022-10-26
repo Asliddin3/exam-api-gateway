@@ -40,7 +40,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.CofirmEmail"
+                            "$ref": "#/definitions/models.CofirmEmail"
                         }
                     }
                 ],
@@ -812,22 +812,56 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Register": {
+        "models.Address": {
             "type": "object",
             "properties": {
-                "email": {
+                "District": {
                     "type": "string"
                 },
-                "first_name": {
+                "Street": {
                     "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
+                }
+            }
+        },
+        "models.CofirmEmail": {
+            "type": "object",
+            "properties": {
                 "password": {
                     "type": "string"
                 },
-                "username": {
+                "userNameOrEmail": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Register": {
+            "type": "object",
+            "properties": {
+                "Adderesses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Address"
+                    }
+                },
+                "Bio": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "LastName": {
+                    "type": "string"
+                },
+                "PassWord": {
+                    "type": "string"
+                },
+                "PhoneNumber": {
+                    "type": "string"
+                },
+                "UserName": {
                     "type": "string"
                 }
             }
@@ -1137,17 +1171,6 @@ const docTemplate = `{
                 },
                 "review": {
                     "type": "number"
-                }
-            }
-        },
-        "v1.CofirmEmail": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "userNameOrEmail": {
-                    "type": "string"
                 }
             }
         }

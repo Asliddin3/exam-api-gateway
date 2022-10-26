@@ -79,22 +79,19 @@ func (h *handlerV1) Register(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Println("error in redis", err)
-	fmt.Println(newUser.Email)
-	_, err = h.redis.Get(newUser.Email)
-	if err != nil {
+
+	val, err := h.redis.Get(newUser.Email)
+	if val != nil {
 		h.log.Error("error email already registered", logger.Error(err))
 		c.JSON(http.StatusAlreadyReported, gin.H{
 			"error": "error email already exists",
 		})
 		return
 	}
-	val, err := h.redis.Get("1")
-	fmt.Println(val)
 
-	_, err = h.redis.Get(newUser.UserName)
-	fmt.Println(err)
-	if err == nil {
+	val, err = h.redis.Get(newUser.UserName)
+	fmt.Println("if getting username", val, err)
+	if val != nil {
 		h.log.Error("error username already registered", logger.Error(err))
 		c.JSON(http.StatusAlreadyReported, gin.H{
 			"error": "error username already exists",
@@ -159,7 +156,7 @@ func EmailVerification(subject, code, email string) (string, error) {
 
 	// Receiver email address.
 	to := []string{
-		"asliddindeh@mail.ru",
+		email,
 	}
 
 	// smtp server configuration.

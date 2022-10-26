@@ -3,6 +3,7 @@ package v1
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/mail"
 	"time"
@@ -15,29 +16,26 @@ import (
 	"github.com/spf13/cast"
 )
 
-type CofirmEmail struct {
-	UserNameOrEmail string
-	Password        string
-}
-
 func valid(email string) bool {
 	_, err := mail.ParseAddress(email)
 	return err == nil
 }
+
 // @BasePath /api/v1
 // Register godoc
 // @Summary Register for authentication
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param userData body CofirmEmail true "login"
+// @Param userData body models.CofirmEmail true "login"
 // @Success 201 {object}  models.VerifiedResponse
 // @Router /confirm [post]
 func (h *handlerV1) GetVerification(c *gin.Context) {
 	var (
-		body CofirmEmail
+		body models.CofirmEmail
 	)
-	err := c.ShouldBindJSON(body)
+	err := c.ShouldBindJSON(&body)
+	fmt.Println(err, body)
 	if err != nil {
 		h.log.Error("error binding json")
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -54,7 +52,8 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 		return
 	}
 	customerReq := pbc.CustomerRequest{}
-	err = json.Unmarshal([]byte(cast.ToString(customer)), customerReq)
+	err = json.Unmarshal([]byte(cast.ToString(customer)), &customerReq)
+	fmt.Println("error unmarshell", err)
 	if err != nil {
 		h.log.Error("error while unmarshiling byte to object", logger.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -94,6 +93,7 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	customerResp, err := h.serviceManager.CustomerService().CreateCustomer(ctx, &customerReq)
+	fmt.Println(err)
 	if err != nil {
 		h.log.Error("error while inserting customer", logger.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -101,7 +101,7 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusCreated, customerResp)
+	// c.JSON(http.StatusCreated, customerResp)
 	if err != nil {
 		h.log.Error("error while creating new auth user", logger.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{
