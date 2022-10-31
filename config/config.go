@@ -17,6 +17,7 @@ type Config struct {
 	CtxTimeout          int
 	LogLevel            string
 	HTTPPort            string
+	SignKey             string
 }
 
 func Load() Config {
@@ -31,7 +32,7 @@ func Load() Config {
 	c.PostServiceHost = cast.ToString(getOrReturnDefault("User_SERVICE_HOST", "localhost"))
 	c.PostServicePort = cast.ToInt(getOrReturnDefault("User_SERVICE_PORT", 8820))
 	c.CtxTimeout = cast.ToInt(getOrReturnDefault("CTX_TIMEOUT", 7))
-
+	c.SignKey = cast.ToString(getOrReturnDefault("SECRET_KEY", "supersecret"))
 	return c
 
 }

@@ -2,8 +2,10 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -72,6 +74,41 @@ func (h *handlerV1) GetListPosts(c *gin.Context) {
 			"error": err.Error(),
 		})
 		h.log.Error("failed to get posts", l.Error(err))
+		return
+	}
+	c.JSON(http.StatusOK, response)
+}
+
+// @BasePath /api/v1
+// @Summary get posts
+// @Description this func get posts
+// @Tags post
+// @Accept json
+// @Produce json
+// @Success 200 {object} post.ListPostResp
+// @Router /post/page [get]
+func (h *handlerV1) ListPostForPage(c *gin.Context) {
+	var (
+		body        post.ListPostReq
+		jspbMarshal protojson.MarshalOptions
+	)
+	jspbMarshal.UseProtoNames = true
+	err := c.ShouldBindJSON(&body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to bind json", l.Error(err))
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+	response, err := h.serviceManager.PostService().ListPost(ctx, &body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to get page posts", l.Error(err))
 		return
 	}
 	c.JSON(http.StatusOK, response)
@@ -187,4 +224,71 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, response)
+}
+
+// @BasePath /api/v1
+// @Summary search post
+// @Description this func search post
+// @Tags post
+// @Accept json
+// @Produce json
+// @Param page path int true "page"
+// @Param limit path int true "limit"
+// @Param parametrs path []string true "paramters"
+// @Param orderby path string true "orderby"
+// @Success 200 "success"
+// @Router /post/search/{page}/{limit}/{parametrs}/{orderby} [get]
+func (h *handlerV1) SearchPost(c *gin.Context) {
+	var (
+		jspbMarshal protojson.MarshalOptions
+	)
+	jspbMarshal.UseProtoNames = true
+	pageStr := c.Param("page")
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "converting page string to int",
+		})
+		return
+	}
+	limitStr := c.Param("limit")
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "converting limit string to int",
+		})
+		return
+	}
+	parametrsStr := c.Param("parametrs")
+	fmt.Println(parametrsStr)
+	parametrReq := make(map[string]string)
+	mapParam := strings.Split(parametrsStr, ",")
+	for _, param := range mapParam {
+		keyValSlice := strings.Split(param, ".")
+		parametrReq[keyValSlice[0]] = keyValSlice[1]
+	}
+
+	orderbyStr := c.Param("orderby")
+	body := post.SearchRequest{
+		Limit:   int64(limit),
+		Page:    int64(page),
+		OrderBy: orderbyStr,
+	}
+	for key, val := range parametrReq {
+		body.Parametrs = append(body.Parametrs, &post.KetValue{
+			Key:   key,
+			Value: val,
+		})
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+	searchResp, err := h.serviceManager.PostService().SearchOrderedPagePost(ctx, &body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "error gettin response from post service",
+		})
+		h.log.Error("error getting serch result", l.Error(err))
+		return
+	}
+	c.JSON(http.StatusFound, searchResp)
 }

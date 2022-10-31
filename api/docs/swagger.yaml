@@ -154,6 +154,25 @@ definitions:
           $ref: '#/definitions/customer.CustomerFullInfo'
         type: array
     type: object
+  customer.LoginResponse:
+    properties:
+      AccessToken:
+        type: string
+      Bio:
+        type: string
+      Email:
+        type: string
+      FirstName:
+        type: string
+      Id:
+        type: integer
+      LastName:
+        type: string
+      PassWord:
+        type: string
+      RefreshToken:
+        type: string
+    type: object
   customer.MediasResponse:
     properties:
       Id:
@@ -207,6 +226,18 @@ definitions:
       userNameOrEmail:
         type: string
     type: object
+  models.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Login:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   models.Register:
     properties:
       Adderesses:
@@ -255,6 +286,13 @@ definitions:
       DeletedPost:
         items:
           $ref: '#/definitions/post.PostReviewResponse'
+        type: array
+    type: object
+  post.ListPostResp:
+    properties:
+      posts:
+        items:
+          $ref: '#/definitions/post.PostResponse'
         type: array
     type: object
   post.MediasRequest:
@@ -581,6 +619,31 @@ paths:
       summary: update customers
       tags:
       - customer
+  /login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: login data
+        in: body
+        name: loginData
+        required: true
+        schema:
+          $ref: '#/definitions/models.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/customer.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: login
+      tags:
+      - Auth
   /post:
     post:
       consumes:
@@ -656,6 +719,57 @@ paths:
           schema:
             $ref: '#/definitions/post.ListAllPostResponse'
       summary: get posts
+      tags:
+      - post
+  /post/page:
+    get:
+      consumes:
+      - application/json
+      description: this func get posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.ListPostResp'
+      summary: get posts
+      tags:
+      - post
+  /post/search/{page}/{limit}/{parametrs}/{orderby}:
+    get:
+      consumes:
+      - application/json
+      description: this func search post
+      parameters:
+      - description: page
+        in: path
+        name: page
+        required: true
+        type: integer
+      - description: limit
+        in: path
+        name: limit
+        required: true
+        type: integer
+      - description: paramters
+        in: path
+        items:
+          type: string
+        name: parametrs
+        required: true
+        type: array
+      - description: orderby
+        in: path
+        name: orderby
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+      summary: search post
       tags:
       - post
   /post/update:

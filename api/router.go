@@ -56,6 +56,7 @@ func New(option Option) *gin.Engine {
 	api.GET("/customer/post/:id", handlerV1.GetCustomerPostById)
 	api.GET("/customer/:id", handlerV1.GetCustomerInfo)
 	// Post routers
+	api.GET("/post/page", handlerV1.ListPostForPage)
 	api.GET("/post/:id", handlerV1.GetPost)
 	api.POST("/post", handlerV1.CreatePost)
 	api.PATCH("/post/update", handlerV1.UpdatePost)
@@ -67,6 +68,9 @@ func New(option Option) *gin.Engine {
 	api.DELETE("/review/delete/:id", handlerV1.DeleteReview)
 	api.POST("/register", handlerV1.Register)
 	api.POST("/confirm", handlerV1.GetVerification)
+	api.POST("/login", handlerV1.Login)
+	api.GET("/post/search/:page/:limit/:parametrs/:orderby", handlerV1.SearchPost)
+	// api.GET("/search")
 	// register customer
 
 	url := ginSwagger.URL("swagger/doc.json")

@@ -110,7 +110,7 @@ func (h *handlerV1) Register(c *gin.Context) {
 	}
 
 	newUser.PassWord = string(hashPass)
-
+	fmt.Println(newUser.PassWord)
 	code := utils.RandomNum()
 
 	_, err = h.redis.Get(fmt.Sprint(code))
@@ -127,7 +127,6 @@ func (h *handlerV1) Register(c *gin.Context) {
 		return
 	}
 	if err = h.redis.SetWithTTL(fmt.Sprint(code), string(userJSON), 86000); err != nil {
-		fmt.Println(err)
 		h.log.Error("error while inserting new username into redis")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "something went wrong, please try again",

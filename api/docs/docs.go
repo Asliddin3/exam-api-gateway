@@ -238,6 +238,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "login",
+                "parameters": [
+                    {
+                        "description": "login data",
+                        "name": "loginData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/customer.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/post": {
             "post": {
                 "description": "this func create post",
@@ -320,6 +359,82 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/post.ListAllPostResponse"
                         }
+                    }
+                }
+            }
+        },
+        "/post/page": {
+            "get": {
+                "description": "this func get posts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "get posts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/post.ListPostResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/search/{page}/{limit}/{parametrs}/{orderby}": {
+            "get": {
+                "description": "this func search post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "search post",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "paramters",
+                        "name": "parametrs",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "orderby",
+                        "name": "orderby",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
                     }
                 }
             }
@@ -752,6 +867,35 @@ const docTemplate = `{
                 }
             }
         },
+        "customer.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "AccessToken": {
+                    "type": "string"
+                },
+                "Bio": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer"
+                },
+                "LastName": {
+                    "type": "string"
+                },
+                "PassWord": {
+                    "type": "string"
+                },
+                "RefreshToken": {
+                    "type": "string"
+                }
+            }
+        },
         "customer.MediasResponse": {
             "type": "object",
             "properties": {
@@ -834,6 +978,25 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Login": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Register": {
             "type": "object",
             "properties": {
@@ -907,6 +1070,17 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/post.PostReviewResponse"
+                    }
+                }
+            }
+        },
+        "post.ListPostResp": {
+            "type": "object",
+            "properties": {
+                "posts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/post.PostResponse"
                     }
                 }
             }

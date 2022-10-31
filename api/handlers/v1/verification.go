@@ -53,7 +53,6 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 	}
 	customerReq := pbc.CustomerRequest{}
 	err = json.Unmarshal([]byte(cast.ToString(customer)), &customerReq)
-	fmt.Println("error unmarshell", err)
 	if err != nil {
 		h.log.Error("error while unmarshiling byte to object", logger.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -89,7 +88,7 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 	// newUser.RefreshToken = "REFRESH TOKEN ALSO NEED TO BE ASSIGNED"
 	customerReq.AccessToken = accessToken
 	customerReq.RefreshToken = refreshToken
-
+	fmt.Println(customerReq.PassWord)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	customerResp, err := h.serviceManager.CustomerService().CreateCustomer(ctx, &customerReq)
@@ -101,17 +100,10 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 		})
 		return
 	}
+
 	// c.JSON(http.StatusCreated, customerResp)
-	if err != nil {
-		h.log.Error("error while creating new auth user", logger.Error(err))
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "error while creating new auth user",
-		})
-		return
-	}
 
 	verified := models.VerifiedResponse{Id: int64(customerResp.Id), AccessToken: customerReq.AccessToken, RefreshToken: customerReq.RefreshToken}
 
 	c.JSON(http.StatusOK, verified)
-	return
 }
