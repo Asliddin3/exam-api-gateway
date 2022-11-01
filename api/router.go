@@ -3,10 +3,13 @@ package api
 import (
 	_ "github.com/Asliddin3/exam-api-gateway/api/docs" //swag
 	v1 "github.com/Asliddin3/exam-api-gateway/api/handlers/v1"
+	"github.com/Asliddin3/exam-api-gateway/api/middleware"
+	"github.com/Asliddin3/exam-api-gateway/api/token"
 	"github.com/Asliddin3/exam-api-gateway/config"
 	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	"github.com/Asliddin3/exam-api-gateway/services"
 	"github.com/Asliddin3/exam-api-gateway/storage/repo"
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -18,6 +21,7 @@ type Option struct {
 	Logger         logger.Logger
 	ServiceManager services.IServiceManager
 	Redis          repo.RedisRepo
+	CasbinEnforcer *casbin.Enforcer
 }
 
 // New ...
@@ -33,7 +37,10 @@ type Option struct {
 // @host      localhost:8070
 // @BasePath  /v1
 
-// @securityDefinitions.basic  BasicAuth
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func New(option Option) *gin.Engine {
 	router := gin.New()
 
@@ -46,6 +53,12 @@ func New(option Option) *gin.Engine {
 		Cfg:            option.Conf,
 		Redis:          option.Redis,
 	})
+	jwtHandler := token.JWTHandler{
+		SigninKey: option.Conf.SigninKey,
+		Log:       option.Logger,
+	}
+
+	router.Use(middleware.NewAuth(option.CasbinEnforcer, jwtHandler, config.Load()))
 
 	api := router.Group("/v1")
 	// Customer routers
@@ -69,7 +82,7 @@ func New(option Option) *gin.Engine {
 	api.POST("/register", handlerV1.Register)
 	api.POST("/confirm", handlerV1.GetVerification)
 	api.POST("/login", handlerV1.Login)
-	api.GET("/post/search/:page/:limit/:parametrs/:orderby", handlerV1.SearchPost)
+	api.GET("/post/search/:page/:limit/:parameters/:orderby", handlerV1.SearchPost)
 	// api.GET("/search")
 	// register customer
 

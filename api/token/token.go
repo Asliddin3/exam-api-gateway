@@ -75,7 +75,7 @@ func (jwtHandler *JWTHandler) ExtractClaims() (jwt.MapClaims, error) {
 	)
 
 	token, err = jwt.Parse(jwtHandler.Token, func(t *jwt.Token) (interface{}, error) {
-		return []byte("secret"), nil
+		return []byte("supersecret"), nil
 	})
 	if err != nil {
 		return nil, err

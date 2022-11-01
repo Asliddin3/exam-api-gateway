@@ -16,6 +16,7 @@ import (
 // @BasePath /api/v1
 // @Summary delete review
 // @Description this func delete review
+// @Security        BearerAuth
 // @Tags review
 // @Accept json
 // @Produce json
@@ -54,6 +55,7 @@ func (h *handlerV1) DeleteReview(c *gin.Context) {
 // PingExample godoc
 // @Summary create review
 // @Description this func create review
+// @Security        BearerAuth
 // @Tags review
 // @Accept json
 // @Produce json
@@ -96,6 +98,7 @@ func (h *handlerV1) CreateReview(c *gin.Context) {
 
 //@Summary get review by id
 //@Description this func get review by id
+// @Security        BearerAuth
 //@Tags review
 //@Accept json
 //@Produce json

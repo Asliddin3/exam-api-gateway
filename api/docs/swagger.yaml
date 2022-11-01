@@ -518,6 +518,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/customer.CustomerResponse'
+      security:
+      - BearerAuth: []
       summary: create customer with info
       tags:
       - customer
@@ -539,6 +541,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/customer.CustomerResponse'
+      security:
+      - BearerAuth: []
       summary: get customer info
       tags:
       - customer
@@ -558,6 +562,8 @@ paths:
       responses:
         "200":
           description: success
+      security:
+      - BearerAuth: []
       summary: delete customer
       tags:
       - customer
@@ -573,6 +579,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/customer.ListCustomers'
+      security:
+      - BearerAuth: []
       summary: get all customers
       tags:
       - customer
@@ -594,6 +602,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/customer.CustomerResponsePost'
+      security:
+      - BearerAuth: []
       summary: get customer with post
       tags:
       - customer
@@ -616,6 +626,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/customer.CustomerResponse'
+      security:
+      - BearerAuth: []
       summary: update customers
       tags:
       - customer
@@ -663,6 +675,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/post.PostResponse'
+      security:
+      - BearerAuth: []
       summary: create post with info
       tags:
       - post
@@ -684,6 +698,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/post.PostResponseCustomer'
+      security:
+      - BearerAuth: []
       summary: get post
       tags:
       - post
@@ -703,6 +719,8 @@ paths:
       responses:
         "200":
           description: success
+      security:
+      - BearerAuth: []
       summary: delete post
       tags:
       - post
@@ -718,6 +736,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/post.ListAllPostResponse'
+      security:
+      - BearerAuth: []
       summary: get posts
       tags:
       - post
@@ -733,10 +753,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/post.ListPostResp'
+      security:
+      - BearerAuth: []
       summary: get posts
       tags:
       - post
-  /post/search/{page}/{limit}/{parametrs}/{orderby}:
+  /post/search/{page}/{limit}/{parameters}/{orderby}:
     get:
       consumes:
       - application/json
@@ -752,11 +774,11 @@ paths:
         name: limit
         required: true
         type: integer
-      - description: paramters
+      - description: parameters
         in: path
         items:
           type: string
-        name: parametrs
+        name: parameters
         required: true
         type: array
       - description: orderby
@@ -769,6 +791,8 @@ paths:
       responses:
         "200":
           description: success
+      security:
+      - BearerAuth: []
       summary: search post
       tags:
       - post
@@ -791,6 +815,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/post.PostResponse'
+      security:
+      - BearerAuth: []
       summary: update post
       tags:
       - post
@@ -832,6 +858,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/review.Review'
+      security:
+      - BearerAuth: []
       summary: create review
       tags:
       - review
@@ -853,6 +881,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/review.Review'
+      security:
+      - BearerAuth: []
       summary: get review by id
       tags:
       - review
@@ -872,10 +902,14 @@ paths:
       responses:
         "200":
           description: success
+      security:
+      - BearerAuth: []
       summary: delete review
       tags:
       - review
 securityDefinitions:
-  BasicAuth:
-    type: basic
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

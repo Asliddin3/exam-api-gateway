@@ -69,7 +69,7 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 	}
 	id := uuid.New()
 	h.jwthandler.Sub = id.String()
-	h.jwthandler.Role = "user"
+	h.jwthandler.Role = "authorized"
 	h.jwthandler.Aud = []string{"todo-app"}
 
 	accessToken, refreshToken, err := h.jwthandler.GenerateAuthJWT()

@@ -56,6 +56,11 @@ const docTemplate = `{
         },
         "/customer": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func create customer with",
                 "consumes": [
                     "application/json"
@@ -90,6 +95,11 @@ const docTemplate = `{
         },
         "/customer/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func delete customer",
                 "consumes": [
                     "application/json"
@@ -119,6 +129,11 @@ const docTemplate = `{
         },
         "/customer/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get all customers",
                 "consumes": [
                     "application/json"
@@ -142,6 +157,11 @@ const docTemplate = `{
         },
         "/customer/post/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get customer with post",
                 "consumes": [
                     "application/json"
@@ -174,6 +194,11 @@ const docTemplate = `{
         },
         "/customer/update": {
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func update customers",
                 "consumes": [
                     "application/json"
@@ -208,6 +233,11 @@ const docTemplate = `{
         },
         "/customer/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get customer info",
                 "consumes": [
                     "application/json"
@@ -279,6 +309,11 @@ const docTemplate = `{
         },
         "/post": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func create post",
                 "consumes": [
                     "application/json"
@@ -313,6 +348,11 @@ const docTemplate = `{
         },
         "/post/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func delete post",
                 "consumes": [
                     "application/json"
@@ -342,6 +382,11 @@ const docTemplate = `{
         },
         "/post/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get posts",
                 "consumes": [
                     "application/json"
@@ -365,6 +410,11 @@ const docTemplate = `{
         },
         "/post/page": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get posts",
                 "consumes": [
                     "application/json"
@@ -386,8 +436,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/post/search/{page}/{limit}/{parametrs}/{orderby}": {
+        "/post/search/{page}/{limit}/{parameters}/{orderby}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func search post",
                 "consumes": [
                     "application/json"
@@ -419,8 +474,8 @@ const docTemplate = `{
                         "items": {
                             "type": "string"
                         },
-                        "description": "paramters",
-                        "name": "parametrs",
+                        "description": "parameters",
+                        "name": "parameters",
                         "in": "path",
                         "required": true
                     },
@@ -441,6 +496,11 @@ const docTemplate = `{
         },
         "/post/update": {
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func update post",
                 "consumes": [
                     "application/json"
@@ -475,6 +535,11 @@ const docTemplate = `{
         },
         "/post/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get post",
                 "consumes": [
                     "application/json"
@@ -537,6 +602,11 @@ const docTemplate = `{
         },
         "/review": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func create review",
                 "consumes": [
                     "application/json"
@@ -571,6 +641,11 @@ const docTemplate = `{
         },
         "/review/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func delete review",
                 "consumes": [
                     "application/json"
@@ -600,6 +675,11 @@ const docTemplate = `{
         },
         "/review/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get review by id",
                 "consumes": [
                     "application/json"
@@ -1350,8 +1430,10 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "BasicAuth": {
-            "type": "basic"
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

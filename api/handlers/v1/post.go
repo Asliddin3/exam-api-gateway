@@ -19,6 +19,7 @@ import (
 // @Summary get post
 // @Description this func get post
 // @Tags post
+// @Security        BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path int true "id"
@@ -56,6 +57,7 @@ func (h *handlerV1) GetPost(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary get posts
 // @Description this func get posts
+// @Security        BearerAuth
 // @Tags post
 // @Accept json
 // @Produce json
@@ -82,6 +84,7 @@ func (h *handlerV1) GetListPosts(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary get posts
 // @Description this func get posts
+// @Security        BearerAuth
 // @Tags post
 // @Accept json
 // @Produce json
@@ -117,6 +120,7 @@ func (h *handlerV1) ListPostForPage(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary delete post
 // @Description this func delete post
+// @Security        BearerAuth
 // @Tags post
 // @Accept json
 // @Produce json
@@ -155,6 +159,7 @@ func (h *handlerV1) DeletePost(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary update post
 // @Description this func update post
+// @Security        BearerAuth
 // @Tags post
 // @Accept json
 // @Produce json
@@ -193,6 +198,7 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 // PingExample godoc
 // @Summary create post with info
 // @Description this func create post
+// @Security        BearerAuth
 // @Tags post
 // @Accept json
 // @Produce json
@@ -229,20 +235,22 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary search post
 // @Description this func search post
+// @Security        BearerAuth
 // @Tags post
 // @Accept json
 // @Produce json
 // @Param page path int true "page"
 // @Param limit path int true "limit"
-// @Param parametrs path []string true "paramters"
+// @Param parameters path []string true "parameters"
 // @Param orderby path string true "orderby"
 // @Success 200 "success"
-// @Router /post/search/{page}/{limit}/{parametrs}/{orderby} [get]
+// @Router /post/search/{page}/{limit}/{parameters}/{orderby} [get]
 func (h *handlerV1) SearchPost(c *gin.Context) {
 	var (
 		jspbMarshal protojson.MarshalOptions
 	)
 	jspbMarshal.UseProtoNames = true
+
 	pageStr := c.Param("page")
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
@@ -259,11 +267,12 @@ func (h *handlerV1) SearchPost(c *gin.Context) {
 		})
 		return
 	}
-	parametrsStr := c.Param("parametrs")
+	parametrsStr := c.Param("parameters")
 	fmt.Println(parametrsStr)
 	parametrReq := make(map[string]string)
 	mapParam := strings.Split(parametrsStr, ",")
 	for _, param := range mapParam {
+		fmt.Println(param)
 		keyValSlice := strings.Split(param, ".")
 		parametrReq[keyValSlice[0]] = keyValSlice[1]
 	}
@@ -285,10 +294,10 @@ func (h *handlerV1) SearchPost(c *gin.Context) {
 	searchResp, err := h.serviceManager.PostService().SearchOrderedPagePost(ctx, &body)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "error gettin response from post service",
+			"error": "error getting response from post service",
 		})
-		h.log.Error("error getting serch result", l.Error(err))
+		h.log.Error("error getting search result", l.Error(err))
 		return
 	}
-	c.JSON(http.StatusFound, searchResp)
+	c.JSON(http.StatusOK, searchResp)
 }

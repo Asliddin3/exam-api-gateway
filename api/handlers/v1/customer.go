@@ -17,6 +17,7 @@ import (
 // PingExample godoc
 // @Summary create customer with info
 // @Description this func create customer with
+// @Security        BearerAuth
 // @Tags customer
 // @Accept json
 // @Produce json
@@ -53,6 +54,7 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 
 // @Summary update customers
 // @Description this func update customers
+// @Security        BearerAuth
 // @Tags customer
 // @Accept json
 // @Produce json
@@ -89,6 +91,7 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary delete customer
 // @Description this func delete customer
+// @Security        BearerAuth
 // @Tags customer
 // @Accept json
 // @Produce json
@@ -127,6 +130,7 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary get all customers
 // @Description this func get all customers
+// @Security        BearerAuth
 // @Tags customer
 // @Accept json
 // @Produce json
@@ -150,6 +154,7 @@ func (h *handlerV1) GetListCustomers(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary get customer with post
 // @Description this func get customer with post
+// @Security        BearerAuth
 // @Tags customer
 // @Accept json
 // @Produce json
@@ -189,6 +194,7 @@ func (h *handlerV1) GetCustomerPostById(c *gin.Context) {
 
 // @Summary get customer info
 // @Description this func get customer info
+// @Security        BearerAuth
 // @Tags customer
 // @Accept json
 // @Produce json

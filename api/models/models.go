@@ -7,6 +7,11 @@ type CofirmEmail struct {
 	UserNameOrEmail string
 	Password        string
 }
+type AdminRequest struct {
+	UserName      string
+	PassWord      string
+	RefreshToken string
+}
 
 type Register struct {
 	FirstName   string     `protobuf:"bytes,1,opt,name=FirstName,proto3" json:"FirstName"`

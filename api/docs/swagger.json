@@ -49,6 +49,11 @@
         },
         "/customer": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func create customer with",
                 "consumes": [
                     "application/json"
@@ -83,6 +88,11 @@
         },
         "/customer/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func delete customer",
                 "consumes": [
                     "application/json"
@@ -112,6 +122,11 @@
         },
         "/customer/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get all customers",
                 "consumes": [
                     "application/json"
@@ -135,6 +150,11 @@
         },
         "/customer/post/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get customer with post",
                 "consumes": [
                     "application/json"
@@ -167,6 +187,11 @@
         },
         "/customer/update": {
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func update customers",
                 "consumes": [
                     "application/json"
@@ -201,6 +226,11 @@
         },
         "/customer/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get customer info",
                 "consumes": [
                     "application/json"
@@ -272,6 +302,11 @@
         },
         "/post": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func create post",
                 "consumes": [
                     "application/json"
@@ -306,6 +341,11 @@
         },
         "/post/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func delete post",
                 "consumes": [
                     "application/json"
@@ -335,6 +375,11 @@
         },
         "/post/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get posts",
                 "consumes": [
                     "application/json"
@@ -358,6 +403,11 @@
         },
         "/post/page": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get posts",
                 "consumes": [
                     "application/json"
@@ -379,8 +429,13 @@
                 }
             }
         },
-        "/post/search/{page}/{limit}/{parametrs}/{orderby}": {
+        "/post/search/{page}/{limit}/{parameters}/{orderby}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func search post",
                 "consumes": [
                     "application/json"
@@ -412,8 +467,8 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "paramters",
-                        "name": "parametrs",
+                        "description": "parameters",
+                        "name": "parameters",
                         "in": "path",
                         "required": true
                     },
@@ -434,6 +489,11 @@
         },
         "/post/update": {
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func update post",
                 "consumes": [
                     "application/json"
@@ -468,6 +528,11 @@
         },
         "/post/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get post",
                 "consumes": [
                     "application/json"
@@ -530,6 +595,11 @@
         },
         "/review": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func create review",
                 "consumes": [
                     "application/json"
@@ -564,6 +634,11 @@
         },
         "/review/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func delete review",
                 "consumes": [
                     "application/json"
@@ -593,6 +668,11 @@
         },
         "/review/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this func get review by id",
                 "consumes": [
                     "application/json"
@@ -1343,8 +1423,10 @@
         }
     },
     "securityDefinitions": {
-        "BasicAuth": {
-            "type": "basic"
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
