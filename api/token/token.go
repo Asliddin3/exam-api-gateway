@@ -106,6 +106,7 @@ func ExtractClaim(tokenStr string, signinigKey []byte) (jwt.MapClaims, error) {
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !(ok && token.Valid) {
+		fmt.Println("error while checking validness")
 		return nil, err
 	}
 	return claims, nil
