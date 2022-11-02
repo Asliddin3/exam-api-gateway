@@ -11,6 +11,7 @@ import (
 type handlerV1 struct {
 	log            logger.Logger
 	serviceManager services.IServiceManager
+	storage        repo.AdminRepo
 	cfg            config.Config
 	redis          repo.RedisRepo
 	jwthandler     jwthandler.JWTHandler
@@ -21,6 +22,7 @@ type HandlerV1Config struct {
 	Logger         logger.Logger
 	ServiceManager services.IServiceManager
 	Cfg            config.Config
+	Storage        repo.AdminRepo
 	Redis          repo.RedisRepo
 	JwtHandler     jwthandler.JWTHandler
 }
@@ -31,6 +33,7 @@ func New(c *HandlerV1Config) *handlerV1 {
 		log:            c.Logger,
 		serviceManager: c.ServiceManager,
 		cfg:            c.Cfg,
+		storage:        c.Storage,
 		redis:          c.Redis,
 		jwthandler:     c.JwtHandler,
 	}

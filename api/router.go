@@ -20,6 +20,7 @@ type Option struct {
 	Conf           config.Config
 	Logger         logger.Logger
 	ServiceManager services.IServiceManager
+	Storage        repo.AdminRepo
 	Redis          repo.RedisRepo
 	CasbinEnforcer *casbin.Enforcer
 }
@@ -37,7 +38,6 @@ type Option struct {
 // @host      localhost:8070
 // @BasePath  /v1
 
-
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
@@ -50,6 +50,7 @@ func New(option Option) *gin.Engine {
 	handlerV1 := v1.New(&v1.HandlerV1Config{
 		Logger:         option.Logger,
 		ServiceManager: option.ServiceManager,
+		Storage:        option.Storage,
 		Cfg:            option.Conf,
 		Redis:          option.Redis,
 	})
@@ -84,6 +85,7 @@ func New(option Option) *gin.Engine {
 	api.POST("/login", handlerV1.Login)
 	api.GET("/post/search/:page/:limit/:parameters/:orderby", handlerV1.SearchPost)
 	// api.GET("/search")
+	api.POST("/admin", handlerV1.LoginAdmin)
 	// register customer
 
 	url := ginSwagger.URL("swagger/doc.json")

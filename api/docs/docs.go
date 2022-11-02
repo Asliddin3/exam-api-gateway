@@ -21,6 +21,45 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "this func login admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "create customer with info",
+                "parameters": [
+                    {
+                        "description": "Admin",
+                        "name": "admin",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AdminRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.AdminResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/confirm": {
             "post": {
                 "consumes": [
@@ -1043,6 +1082,28 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "Street": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdminRequest": {
+            "type": "object",
+            "properties": {
+                "passWord": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdminResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "userName": {
                     "type": "string"
                 }
             }

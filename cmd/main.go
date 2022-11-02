@@ -5,14 +5,15 @@ import (
 
 	"github.com/Asliddin3/exam-api-gateway/api"
 	"github.com/Asliddin3/exam-api-gateway/config"
+	"github.com/Asliddin3/exam-api-gateway/pkg/db"
 	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	"github.com/Asliddin3/exam-api-gateway/services"
+	p "github.com/Asliddin3/exam-api-gateway/storage/postgres"
+	r "github.com/Asliddin3/exam-api-gateway/storage/redis"
 	"github.com/casbin/casbin/v2"
 	defaultrolemanager "github.com/casbin/casbin/v2/rbac/default-role-manager"
 	"github.com/casbin/casbin/v2/util"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
-
-	r "github.com/Asliddin3/exam-api-gateway/storage/redis"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -61,6 +62,15 @@ func main() {
 		},
 	}
 
+	log.Info("main:sqlxConfig",
+		logger.String("host", cfg.PostgresHost),
+		logger.Int("port", cfg.PostgresPort),
+		logger.String("datbase", cfg.PostgresDB))
+	connDb, err := db.ConnectToDb(cfg)
+	if err != nil {
+		log.Fatal("sqlx connection to postgres error", logger.Error(err))
+	}
+
 	casbinEnforcer.GetRoleManager().(*defaultrolemanager.RoleManager).AddMatchingFunc("keyMatch", util.KeyMatch)
 	casbinEnforcer.GetRoleManager().(*defaultrolemanager.RoleManager).AddMatchingFunc("keyMatch3", util.KeyMatch3)
 
@@ -68,6 +78,7 @@ func main() {
 		Conf:           cfg,
 		Logger:         log,
 		ServiceManager: serviceManager,
+		Storage:        p.NewAdminRepo(connDb),
 		Redis:          r.NewRedisRepo(pool),
 		CasbinEnforcer: casbinEnforcer,
 	})

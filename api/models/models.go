@@ -8,9 +8,12 @@ type CofirmEmail struct {
 	Password        string
 }
 type AdminRequest struct {
-	UserName      string
-	PassWord      string
-	RefreshToken string
+	UserName string
+	PassWord string
+}
+type AdminResponse struct {
+	UserName    string
+	AccessToken string
 }
 
 type Register struct {

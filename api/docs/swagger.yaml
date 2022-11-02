@@ -219,6 +219,20 @@ definitions:
       Street:
         type: string
     type: object
+  models.AdminRequest:
+    properties:
+      passWord:
+        type: string
+      userName:
+        type: string
+    type: object
+  models.AdminResponse:
+    properties:
+      accessToken:
+        type: string
+      userName:
+        type: string
+    type: object
   models.CofirmEmail:
     properties:
       password:
@@ -478,6 +492,30 @@ info:
   title: Review api
   version: "1.0"
 paths:
+  /admin:
+    post:
+      consumes:
+      - application/json
+      description: this func login admin
+      parameters:
+      - description: Admin
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/models.AdminRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.AdminResponse'
+      security:
+      - BearerAuth: []
+      summary: create customer with info
+      tags:
+      - Admin
   /confirm:
     post:
       consumes:
