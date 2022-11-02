@@ -46,7 +46,7 @@ func Load() Config {
 	c.AuthConfigPath = cast.ToString(getOrReturnDefault("AUTH_PATH", "./config/auth.conf"))
 	c.CtxTimeout = cast.ToInt(getOrReturnDefault("CTX_TIMEOUT", 7))
 	c.SignKey = cast.ToString(getOrReturnDefault("SECRET_KEY", "supersecret"))
-	c.SigninKey=cast.ToString(getOrReturnDefault("SIGNIN_KEY","asliddin"))
+	c.SigninKey=cast.ToString(getOrReturnDefault("SIGNIN_KEY","supersecret"))
 	return c
 
 }

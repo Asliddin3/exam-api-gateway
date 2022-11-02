@@ -10,6 +10,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/Asliddin3/exam-api-gateway/genproto/review"
+	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	l "github.com/Asliddin3/exam-api-gateway/pkg/logger"
 )
 
@@ -39,8 +40,31 @@ func (h *handlerV1) DeleteReview(c *gin.Context) {
 		h.log.Error("failed to bind json", l.Error(err))
 		return
 	}
+	claims, err := GetClaims(*h, c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "you are not authorized",
+		})
+		h.log.Error("Checking Authorozation", logger.Error(err))
+		return
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
+	reviewInfo, err := h.serviceManager.ReviewService().GetReviewById(ctx, &review.ReviewId{Id: id})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "error checking review customer id",
+		})
+		return
+	}
+	if claims.Sub != reviewInfo.CustomerId && claims.Role != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{
+			"info": "You haven't access ",
+		})
+		return
+	}
+
 	response, err := h.serviceManager.ReviewService().DeleteReview(ctx, body)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

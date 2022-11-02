@@ -145,7 +145,7 @@
                 "summary": "delete customer",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "path",
@@ -207,7 +207,7 @@
                 "summary": "get customer with post",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "path",
@@ -283,7 +283,7 @@
                 "summary": "get customer info",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "path",
@@ -435,34 +435,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/post.ListAllPostResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/post/page": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "this func get posts",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "post"
-                ],
-                "summary": "get posts",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/post.ListPostResp"
                         }
                     }
                 }
@@ -794,7 +766,7 @@
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -822,9 +794,6 @@
         "customer.CustomerRequest": {
             "type": "object",
             "properties": {
-                "AccessToken": {
-                    "type": "string"
-                },
                 "Adderesses": {
                     "type": "array",
                     "items": {
@@ -838,6 +807,9 @@
                     "type": "string"
                 },
                 "FirstName": {
+                    "type": "string"
+                },
+                "Id": {
                     "type": "string"
                 },
                 "LastName": {
@@ -879,7 +851,7 @@
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -914,7 +886,7 @@
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -952,7 +924,7 @@
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -982,9 +954,6 @@
         "customer.LoginResponse": {
             "type": "object",
             "properties": {
-                "AccessToken": {
-                    "type": "string"
-                },
                 "Bio": {
                     "type": "string"
                 },
@@ -995,7 +964,7 @@
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -1082,6 +1051,9 @@
         "models.AdminRequest": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "passWord": {
                     "type": "string"
                 },
@@ -1170,7 +1142,7 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "refresh_token": {
                     "type": "string"
@@ -1204,17 +1176,6 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/post.PostReviewResponse"
-                    }
-                }
-            }
-        },
-        "post.ListPostResp": {
-            "type": "object",
-            "properties": {
-                "posts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/post.PostResponse"
                     }
                 }
             }
@@ -1254,7 +1215,7 @@
             "type": "object",
             "properties": {
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1277,7 +1238,7 @@
                     "type": "string"
                 },
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1309,7 +1270,7 @@
                     "type": "string"
                 },
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1365,7 +1326,7 @@
                     "type": "string"
                 },
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "DeletedAt": {
                     "type": "string"
@@ -1403,7 +1364,7 @@
             "type": "object",
             "properties": {
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1426,7 +1387,7 @@
             "type": "object",
             "properties": {
                 "customer_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"
@@ -1449,7 +1410,7 @@
             "type": "object",
             "properties": {
                 "customer_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"
@@ -1469,7 +1430,7 @@
             "type": "object",
             "properties": {
                 "customer_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"

@@ -54,14 +54,15 @@ func (h *handlerV1) LoginAdmin(c *gin.Context) {
 			"message": "Wrong password",
 		})
 	}
-
+	fmt.Println("admin login", h.cfg.SigninKey)
 	token := jwthandler.JWTHandler{
-		Sub:       body.UserName,
+		Sub:       string(exists.Id),
 		Role:      "admin",
 		Iss:       "admin",
-		SigninKey: h.cfg.SignKey,
+		SigninKey: "supersecret",
+		Aud:       []string{"admin-app"},
 	}
-
+	fmt.Println("in admin", token.SigninKey)
 	access, _, err := token.GenerateAuthJWT()
 	if err != nil {
 		h.log.Error("error while generating tokens")

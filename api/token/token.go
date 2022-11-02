@@ -51,8 +51,8 @@ func (jwtHandler *JWTHandler) GenerateAuthJWT() (access, refresh string, err err
 	claims["iat"] = time.Now().Unix()
 	claims["role"] = jwtHandler.Role
 	claims["aud"] = jwtHandler.Aud
-	fmt.Println(jwtHandler.SigninKey, "jwt package")
-	access, err = accessToken.SignedString([]byte("secret"))
+
+	access, err = accessToken.SignedString([]byte(jwtHandler.SigninKey))
 	if err != nil {
 		jwtHandler.Log.Error("error generating access token", logger.Error(err))
 		return
@@ -75,9 +75,11 @@ func (jwtHandler *JWTHandler) ExtractClaims() (jwt.MapClaims, error) {
 	)
 
 	token, err = jwt.Parse(jwtHandler.Token, func(t *jwt.Token) (interface{}, error) {
-		return []byte("supersecret"), nil
+		fmt.Println("in token.go 78", jwtHandler.SigninKey)
+		return []byte(jwtHandler.SigninKey), nil
 	})
 	if err != nil {
+		fmt.Println("error while token.go 81", err)
 		return nil, err
 	}
 

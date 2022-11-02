@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+
 	_ "github.com/Asliddin3/exam-api-gateway/api/docs" //swag
 	v1 "github.com/Asliddin3/exam-api-gateway/api/handlers/v1"
 	"github.com/Asliddin3/exam-api-gateway/api/middleware"
@@ -58,7 +60,7 @@ func New(option Option) *gin.Engine {
 		SigninKey: option.Conf.SigninKey,
 		Log:       option.Logger,
 	}
-
+	fmt.Println("in router ", jwtHandler.SigninKey)
 	router.Use(middleware.NewAuth(option.CasbinEnforcer, jwtHandler, config.Load()))
 
 	api := router.Group("/v1")
@@ -70,7 +72,7 @@ func New(option Option) *gin.Engine {
 	api.GET("/customer/post/:id", handlerV1.GetCustomerPostById)
 	api.GET("/customer/:id", handlerV1.GetCustomerInfo)
 	// Post routers
-	api.GET("/post/page", handlerV1.ListPostForPage)
+	// api.GET("/post/page", handlerV1.ListPostForPage)
 	api.GET("/post/:id", handlerV1.GetPost)
 	api.POST("/post", handlerV1.CreatePost)
 	api.PATCH("/post/update", handlerV1.UpdatePost)

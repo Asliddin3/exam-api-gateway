@@ -63,9 +63,9 @@ func (h *handlerV1) Login(c *gin.Context) {
 		Sub:       string(user.Id),
 		Role:      "user",
 		Iss:       "customer-api",
-		SigninKey: h.cfg.SignKey,
+		SigninKey: h.cfg.SigninKey,
 	}
-
+	fmt.Println("in token ", token.SigninKey)
 	access, refresh, err := token.GenerateAuthJWT()
 	if err != nil {
 		h.log.Error("error while generating tokens")
@@ -86,10 +86,8 @@ func (h *handlerV1) Login(c *gin.Context) {
 	h.serviceManager.CustomerService().RefreshToken(ctx,
 		&pbc.RefreshTokenRequest{
 			Id:           user.Id,
-			AccessToken:  access,
 			RefreshToken: refresh})
 
-	user.AccessToken = access
 	user.RefreshToken = refresh
 	user.PassWord = ""
 	c.JSON(http.StatusOK, user)

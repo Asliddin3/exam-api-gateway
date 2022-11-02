@@ -70,8 +70,9 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 	id := uuid.New()
 	h.jwthandler.Sub = id.String()
 	h.jwthandler.Role = "authorized"
-	h.jwthandler.Aud = []string{"todo-app"}
-
+	h.jwthandler.Aud = []string{"post-app"}
+	h.jwthandler.SigninKey = "supersecret"
+	fmt.Println("in verification", h.jwthandler.SigninKey)
 	accessToken, refreshToken, err := h.jwthandler.GenerateAuthJWT()
 
 	if err != nil {
@@ -86,11 +87,10 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 
 	// newUser.AccessToken = "ACCESS TOKEN NEED TO BE ASSIGNED"
 	// newUser.RefreshToken = "REFRESH TOKEN ALSO NEED TO BE ASSIGNED"
-	customerReq.AccessToken = accessToken
 	customerReq.RefreshToken = refreshToken
-	fmt.Println(customerReq.PassWord)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
+	customerReq.Id = id.String()
 	customerResp, err := h.serviceManager.CustomerService().CreateCustomer(ctx, &customerReq)
 	fmt.Println(err)
 	if err != nil {
@@ -103,7 +103,7 @@ func (h *handlerV1) GetVerification(c *gin.Context) {
 
 	// c.JSON(http.StatusCreated, customerResp)
 
-	verified := models.VerifiedResponse{Id: int64(customerResp.Id), AccessToken: customerReq.AccessToken, RefreshToken: customerReq.RefreshToken}
+	verified := models.VerifiedResponse{Id: customerResp.Id, AccessToken: accessToken, RefreshToken: customerReq.RefreshToken}
 
 	c.JSON(http.StatusOK, verified)
 }

@@ -152,7 +152,7 @@ const docTemplate = `{
                 "summary": "delete customer",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "path",
@@ -214,7 +214,7 @@ const docTemplate = `{
                 "summary": "get customer with post",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "path",
@@ -290,7 +290,7 @@ const docTemplate = `{
                 "summary": "get customer info",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "path",
@@ -442,34 +442,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/post.ListAllPostResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/post/page": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "this func get posts",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "post"
-                ],
-                "summary": "get posts",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/post.ListPostResp"
                         }
                     }
                 }
@@ -801,7 +773,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -829,9 +801,6 @@ const docTemplate = `{
         "customer.CustomerRequest": {
             "type": "object",
             "properties": {
-                "AccessToken": {
-                    "type": "string"
-                },
                 "Adderesses": {
                     "type": "array",
                     "items": {
@@ -845,6 +814,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "FirstName": {
+                    "type": "string"
+                },
+                "Id": {
                     "type": "string"
                 },
                 "LastName": {
@@ -886,7 +858,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -921,7 +893,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -959,7 +931,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -989,9 +961,6 @@ const docTemplate = `{
         "customer.LoginResponse": {
             "type": "object",
             "properties": {
-                "AccessToken": {
-                    "type": "string"
-                },
                 "Bio": {
                     "type": "string"
                 },
@@ -1002,7 +971,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "Id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LastName": {
                     "type": "string"
@@ -1089,6 +1058,9 @@ const docTemplate = `{
         "models.AdminRequest": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "passWord": {
                     "type": "string"
                 },
@@ -1177,7 +1149,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "refresh_token": {
                     "type": "string"
@@ -1211,17 +1183,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/post.PostReviewResponse"
-                    }
-                }
-            }
-        },
-        "post.ListPostResp": {
-            "type": "object",
-            "properties": {
-                "posts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/post.PostResponse"
                     }
                 }
             }
@@ -1261,7 +1222,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1284,7 +1245,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1316,7 +1277,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1372,7 +1333,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "DeletedAt": {
                     "type": "string"
@@ -1410,7 +1371,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "CustomerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "Description": {
                     "type": "string"
@@ -1433,7 +1394,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "customer_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"
@@ -1456,7 +1417,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "customer_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"
@@ -1476,7 +1437,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "customer_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"

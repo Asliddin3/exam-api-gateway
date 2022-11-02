@@ -2,13 +2,15 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/Asliddin3/exam-api-gateway/genproto/customer"
+	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	l "github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -40,6 +42,7 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
+	body.Id = uuid.New().String()
 	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, &body)
 
 	if err != nil {
@@ -66,8 +69,17 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 		body        customer.CustomerUpdate
 		jspbMarshal protojson.MarshalOptions
 	)
+	claims, err := GetClaims(*h, c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "you are not authorized",
+		})
+		h.log.Error("Checking Authorozation", logger.Error(err))
+		return
+	}
+
 	jspbMarshal.UseProtoNames = true
-	err := c.ShouldBindJSON(&body)
+	err = c.ShouldBindJSON(&body)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -75,6 +87,15 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 		h.log.Error("failed to bind json", l.Error(err))
 		return
 	}
+	fmt.Println(claims)
+	fmt.Println(claims.Sub, "===", body.Id)
+	if claims.Sub != body.Id && claims.Role != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{
+			"info": "You haven't access ",
+		})
+		return
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	response, err := h.serviceManager.CustomerService().UpdateCustomer(ctx, &body)
@@ -95,23 +116,33 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 // @Tags customer
 // @Accept json
 // @Produce json
-// @Param id path int true "id"
+// @Param id path string true "id"
 // @Success 200 "success"
 // @Router /customer/delete/{id} [delete]
 func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 	var jspbMarshal protojson.MarshalOptions
 	jspbMarshal.UseProtoNames = true
 
-	guid := c.Param("id")
-	id, err := strconv.ParseInt(guid, 10, 64)
-	body := &customer.CustomerId{
-		Id: id,
-	}
+	claims, err := GetClaims(*h, c)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "you are not authorized",
 		})
-		h.log.Error("failed to convert string to int", l.Error(err))
+		h.log.Error("Checking Authorozation", logger.Error(err))
+		return
+	}
+
+	guid := c.Param("id")
+	// id, err := strconv.ParseInt(guid, 10, 64)
+	fmt.Println("guid ", guid)
+	body := &customer.CustomerId{
+		Id: guid,
+	}
+
+	if claims.Sub != body.Id && claims.Role != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{
+			"info": "You haven't access ",
+		})
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
@@ -158,7 +189,7 @@ func (h *handlerV1) GetListCustomers(c *gin.Context) {
 // @Tags customer
 // @Accept json
 // @Produce json
-// @Param id path int true "id"
+// @Param id path string true "id"
 // @Success 200 {object} customer.CustomerResponsePost
 // @Router /customer/post/{id} [get]
 func (h *handlerV1) GetCustomerPostById(c *gin.Context) {
@@ -166,17 +197,18 @@ func (h *handlerV1) GetCustomerPostById(c *gin.Context) {
 	jspbMarshal.UseProtoNames = true
 
 	guid := c.Param("id")
-	id, err := strconv.ParseInt(guid, 10, 64)
+	// id, err := strconv.ParseInt(guid, 10, 64)
+	fmt.Println("guid in get customer post", guid)
 	body := &customer.CustomerId{
-		Id: id,
+		Id: guid,
 	}
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("failed to convert string to int", l.Error(err))
-		return
-	}
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": err.Error(),
+	// 	})
+	// 	h.log.Error("failed to convert string to int", l.Error(err))
+	// 	return
+	// }
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	response, err := h.serviceManager.CustomerService().GetById(ctx, body)
@@ -198,7 +230,7 @@ func (h *handlerV1) GetCustomerPostById(c *gin.Context) {
 // @Tags customer
 // @Accept json
 // @Produce json
-// @Param id path int true "id"
+// @Param id path string true "id"
 // @Success 200 {object} customer.CustomerResponse
 // @Router /customer/{id} [get]
 func (h *handlerV1) GetCustomerInfo(c *gin.Context) {
@@ -206,17 +238,18 @@ func (h *handlerV1) GetCustomerInfo(c *gin.Context) {
 	jspbMarshal.UseProtoNames = true
 
 	guid := c.Param("id")
-	id, err := strconv.ParseInt(guid, 10, 64)
+	// id, err := strconv.ParseInt(guid, 10, 64)
+
 	body := &customer.CustomerId{
-		Id: id,
+		Id: guid,
 	}
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("failed to convert string to int", l.Error(err))
-		return
-	}
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": err.Error(),
+	// 	})
+	// 	h.log.Error("failed to convert string to int", l.Error(err))
+	// 	return
+	// }
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 	response, err := h.serviceManager.CustomerService().GetCustomerInfo(ctx, body)

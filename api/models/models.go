@@ -8,6 +8,7 @@ type CofirmEmail struct {
 	Password        string
 }
 type AdminRequest struct {
+	Id       int64
 	UserName string
 	PassWord string
 }
@@ -53,7 +54,7 @@ type User struct {
 }
 
 type VerifiedResponse struct {
-	Id           int64  `json:"id"`
+	Id           string `json:"id"`
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }

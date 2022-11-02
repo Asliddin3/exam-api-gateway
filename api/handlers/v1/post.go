@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/Asliddin3/exam-api-gateway/genproto/post"
+	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	l "github.com/Asliddin3/exam-api-gateway/pkg/logger"
 )
 
@@ -81,41 +82,41 @@ func (h *handlerV1) GetListPosts(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @BasePath /api/v1
-// @Summary get posts
-// @Description this func get posts
-// @Security        BearerAuth
-// @Tags post
-// @Accept json
-// @Produce json
-// @Success 200 {object} post.ListPostResp
-// @Router /post/page [get]
-func (h *handlerV1) ListPostForPage(c *gin.Context) {
-	var (
-		body        post.ListPostReq
-		jspbMarshal protojson.MarshalOptions
-	)
-	jspbMarshal.UseProtoNames = true
-	err := c.ShouldBindJSON(&body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("failed to bind json", l.Error(err))
-		return
-	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
-	response, err := h.serviceManager.PostService().ListPost(ctx, &body)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("failed to get page posts", l.Error(err))
-		return
-	}
-	c.JSON(http.StatusOK, response)
-}
+// // @BasePath /api/v1
+// // @Summary get posts
+// // @Description this func get posts
+// // @Security        BearerAuth
+// // @Tags post
+// // @Accept json
+// // @Produce json
+// // @Success 200 {object} post.ListPostResp
+// // @Router /post/page [get]
+// func (h *handlerV1) ListPostForPage(c *gin.Context) {
+// 	var (
+// 		body        post.ListPostReq
+// 		jspbMarshal protojson.MarshalOptions
+// 	)
+// 	jspbMarshal.UseProtoNames = true
+// 	err := c.ShouldBindJSON(&body)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		h.log.Error("failed to bind json", l.Error(err))
+// 		return
+// 	}
+// 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+// 	defer cancel()
+// 	response, err := h.serviceManager.PostService().ListPost(ctx, &body)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		h.log.Error("failed to get page posts", l.Error(err))
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, response)
+// }
 
 // @BasePath /api/v1
 // @Summary delete post
@@ -133,6 +134,37 @@ func (h *handlerV1) DeletePost(c *gin.Context) {
 
 	guid := c.Param("id")
 	id, err := strconv.ParseInt(guid, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "error binding id",
+		})
+		return
+	}
+	claims, err := GetClaims(*h, c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "you are not authorized",
+		})
+		h.log.Error("Checking Authorozation", logger.Error(err))
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+	postInfo, err := h.serviceManager.PostService().GetPost(ctx, &post.PostId{Id: id})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "error getting post info for check customer id",
+		})
+		return
+	}
+	if claims.Sub != postInfo.CustomerId && claims.Role != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{
+			"info": "You haven't access ",
+		})
+		return
+	}
+
 	body := &post.PostId{
 		Id: id,
 	}
@@ -143,8 +175,9 @@ func (h *handlerV1) DeletePost(c *gin.Context) {
 		h.log.Error("failed to convert string to int", l.Error(err))
 		return
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
+
+	// ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	// defer cancel()
 	response, err := h.serviceManager.PostService().DeletePost(ctx, body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -178,6 +211,20 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 			"error": err.Error(),
 		})
 		h.log.Error("failed to bind json", l.Error(err))
+		return
+	}
+	claims, err := GetClaims(*h, c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "you are not authorized",
+		})
+		h.log.Error("Checking Authorozation", logger.Error(err))
+		return
+	}
+	if claims.Sub != body.CustomerId && claims.Role != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{
+			"info": "You haven't access ",
+		})
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))

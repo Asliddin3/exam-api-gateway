@@ -89,7 +89,7 @@ func (a *JwtRoleAuth) CheckPermission(r *http.Request) (bool, error) {
 	fmt.Println(r.URL.Path)
 
 	allowed, err := a.enforcer.Enforce(user, path, method)
-	fmt.Println(allowed)
+	
 	if err != nil {
 		panic(err)
 	}
