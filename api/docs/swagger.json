@@ -11,7 +11,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8070",
+    "host": "44.202.237.248:8070",
     "basePath": "/v1",
     "paths": {
         "/admin": {
@@ -327,7 +327,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/customer.LoginResponse"
+                            "$ref": "#/definitions/models.LoginUser"
                         }
                     },
                     "400": {
@@ -990,32 +990,6 @@
                 }
             }
         },
-        "customer.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "Bio": {
-                    "type": "string"
-                },
-                "Email": {
-                    "type": "string"
-                },
-                "FirstName": {
-                    "type": "string"
-                },
-                "Id": {
-                    "type": "string"
-                },
-                "LastName": {
-                    "type": "string"
-                },
-                "PassWord": {
-                    "type": "string"
-                },
-                "RefreshToken": {
-                    "type": "string"
-                }
-            }
-        },
         "customer.MediasResponse": {
             "type": "object",
             "properties": {
@@ -1138,6 +1112,17 @@
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.LoginUser": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "userName": {
                     "type": "string"
                 }
             }

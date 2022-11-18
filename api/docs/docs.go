@@ -334,7 +334,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/customer.LoginResponse"
+                            "$ref": "#/definitions/models.LoginUser"
                         }
                     },
                     "400": {
@@ -997,32 +997,6 @@ const docTemplate = `{
                 }
             }
         },
-        "customer.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "Bio": {
-                    "type": "string"
-                },
-                "Email": {
-                    "type": "string"
-                },
-                "FirstName": {
-                    "type": "string"
-                },
-                "Id": {
-                    "type": "string"
-                },
-                "LastName": {
-                    "type": "string"
-                },
-                "PassWord": {
-                    "type": "string"
-                },
-                "RefreshToken": {
-                    "type": "string"
-                }
-            }
-        },
         "customer.MediasResponse": {
             "type": "object",
             "properties": {
@@ -1145,6 +1119,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.LoginUser": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "userName": {
                     "type": "string"
                 }
             }
@@ -1527,7 +1512,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8070",
+	Host:             "44.202.237.248:8070",
 	BasePath:         "/v1",
 	Schemes:          []string{},
 	Title:            "Review api",

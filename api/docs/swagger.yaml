@@ -154,23 +154,6 @@ definitions:
           $ref: '#/definitions/customer.CustomerFullInfo'
         type: array
     type: object
-  customer.LoginResponse:
-    properties:
-      Bio:
-        type: string
-      Email:
-        type: string
-      FirstName:
-        type: string
-      Id:
-        type: string
-      LastName:
-        type: string
-      PassWord:
-        type: string
-      RefreshToken:
-        type: string
-    type: object
   customer.MediasResponse:
     properties:
       Id:
@@ -250,6 +233,13 @@ definitions:
       password:
         type: string
       username:
+        type: string
+    type: object
+  models.LoginUser:
+    properties:
+      accessToken:
+        type: string
+      userName:
         type: string
     type: object
   models.ModeratorRequest:
@@ -490,7 +480,7 @@ definitions:
       review:
         type: number
     type: object
-host: localhost:8070
+host: 44.202.237.248:8070
 info:
   contact:
     email: asliddinvstalim@gmail.com
@@ -695,7 +685,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/customer.LoginResponse'
+            $ref: '#/definitions/models.LoginUser'
         "400":
           description: Bad Request
           schema:
