@@ -13,6 +13,7 @@ import (
 	"github.com/Asliddin3/exam-api-gateway/storage/repo"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -37,7 +38,7 @@ type Option struct {
 // @contact.url    https://t.me/asliddindeh
 // @contact.email  asliddinvstalim@gmail.com
 
-// @host      localhost:8070
+// @host      44.202.237.248:8070
 // @BasePath  /v1
 
 // @securityDefinitions.apikey BearerAuth
@@ -60,6 +61,14 @@ func New(option Option) *gin.Engine {
 		SigninKey: option.Conf.SigninKey,
 		Log:       option.Logger,
 	}
+
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowHeaders:     []string{"*"},
+		AllowMethods:     []string{"*"},
+		AllowCredentials: true,
+		AllowOrigins:     []string{},
+	}))
 	fmt.Println("in router ", jwtHandler.SigninKey)
 	router.Use(middleware.NewAuth(option.CasbinEnforcer, jwtHandler, config.Load()))
 
