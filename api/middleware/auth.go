@@ -70,6 +70,8 @@ func (a *JwtRoleAuth) GetRole(r *http.Request) (string, error) {
 		role = "authorized"
 	} else if claims["role"].(string) == "admin" {
 		role = "admin"
+	} else if claims["role"].(string) == "moderator" {
+		role = "moderator"
 	} else {
 		role = "unknown"
 	}
@@ -89,7 +91,7 @@ func (a *JwtRoleAuth) CheckPermission(r *http.Request) (bool, error) {
 	fmt.Println(r.URL.Path)
 
 	allowed, err := a.enforcer.Enforce(user, path, method)
-	
+
 	if err != nil {
 		panic(err)
 	}

@@ -17,6 +17,20 @@ type AdminResponse struct {
 	AccessToken string
 }
 
+type LoginUser struct {
+	UserName    string
+	AccessToken string
+}
+
+type ModeratorRequest struct {
+	Id       int64
+	UserName string
+	PassWord string
+}
+type ModeratorResponse struct {
+	UserName    string
+	AccessToken string
+}
 type Register struct {
 	FirstName   string     `protobuf:"bytes,1,opt,name=FirstName,proto3" json:"FirstName"`
 	LastName    string     `protobuf:"bytes,2,opt,name=LastName,proto3" json:"LastName"`

@@ -7,6 +7,13 @@ update_submodule:
 run:
 	go run cmd/main.go
 
+create:
+	migrate create -ext sql -dir migrations -seq create_admin_table
+
+up-version:
+	migrate -source file:./migrations/ -database 'postgres://asliddin:123@apidb:5436/apidb?sslmode=disable' up
+
+
 create_proto_submodule:
 	git submodule add git@github.com:Asliddin3/Proto-Submodule-Product-servise.git
 

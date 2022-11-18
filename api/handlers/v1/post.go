@@ -221,7 +221,7 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("Checking Authorozation", logger.Error(err))
 		return
 	}
-	if claims.Sub != body.CustomerId && claims.Role != "admin" {
+	if claims.Sub != body.CustomerId && claims.Role != "admin" && claims.Role!="moderator"{
 		c.JSON(http.StatusForbidden, gin.H{
 			"info": "You haven't access ",
 		})

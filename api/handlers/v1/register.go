@@ -114,9 +114,11 @@ func (h *handlerV1) Register(c *gin.Context) {
 	code := utils.RandomNum()
 
 	_, err = h.redis.Get(fmt.Sprint(code))
+	fmt.Println(err)
 	for err != nil {
 		code := utils.RandomNum()
 		_, err = h.redis.Get(fmt.Sprint(code))
+		fmt.Println(err)
 	}
 	userJSON, err := json.Marshal(newUser)
 	if err != nil {

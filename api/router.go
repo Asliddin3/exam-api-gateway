@@ -88,6 +88,7 @@ func New(option Option) *gin.Engine {
 	api.GET("/post/search/:page/:limit/:parameters/:orderby", handlerV1.SearchPost)
 	// api.GET("/search")
 	api.POST("/admin", handlerV1.LoginAdmin)
+	api.POST("/moderator", handlerV1.LoginModerator)
 	// register customer
 
 	url := ginSwagger.URL("swagger/doc.json")

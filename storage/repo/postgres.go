@@ -6,4 +6,5 @@ import (
 
 type AdminRepo interface {
 	LoginAdmin(*models.AdminRequest) (*models.AdminRequest, error)
+	LoginModerator(*models.ModeratorRequest) (*models.ModeratorRequest, error)
 }

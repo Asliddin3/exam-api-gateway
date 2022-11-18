@@ -24,3 +24,15 @@ func (r *adminRepo) LoginAdmin(req *model.AdminRequest) (*model.AdminRequest, er
 	adminResp.UserName = req.UserName
 	return &adminResp, nil
 }
+
+func (r *adminRepo) LoginModerator(req *model.ModeratorRequest) (*model.ModeratorRequest, error) {
+	moderatorResp := model.ModeratorRequest{}
+	err := r.db.QueryRow(`
+	select id,password from moderator where username=$1
+	`, req.UserName).Scan(&moderatorResp.Id, &moderatorResp.PassWord)
+	if err != nil {
+		return &model.ModeratorRequest{}, err
+	}
+	moderatorResp.UserName = req.UserName
+	return &moderatorResp, nil
+}

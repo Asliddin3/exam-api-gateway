@@ -252,6 +252,22 @@ definitions:
       username:
         type: string
     type: object
+  models.ModeratorRequest:
+    properties:
+      id:
+        type: integer
+      passWord:
+        type: string
+      userName:
+        type: string
+    type: object
+  models.ModeratorResponse:
+    properties:
+      accessToken:
+        type: string
+      userName:
+        type: string
+    type: object
   models.Register:
     properties:
       Adderesses:
@@ -687,6 +703,30 @@ paths:
       summary: login
       tags:
       - Auth
+  /moderator:
+    post:
+      consumes:
+      - application/json
+      description: this func login moderator
+      parameters:
+      - description: Moderator
+        in: body
+        name: moderator
+        required: true
+        schema:
+          $ref: '#/definitions/models.ModeratorRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ModeratorResponse'
+      security:
+      - BearerAuth: []
+      summary: login moderator
+      tags:
+      - Admin
   /post:
     post:
       consumes:

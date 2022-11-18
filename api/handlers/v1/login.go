@@ -11,7 +11,6 @@ import (
 
 	"github.com/Asliddin3/exam-api-gateway/api/models"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 )
@@ -21,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param loginData body models.Login true "login data"
-// @Success 200 {object} customer.LoginResponse
+// @Success 200 {object} models.LoginUser
 // @Failure 400 {object} models.Error
 // @Router /login [post]
 func (h *handlerV1) Login(c *gin.Context) {
@@ -49,7 +48,6 @@ func (h *handlerV1) Login(c *gin.Context) {
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
-
 	user, err := h.serviceManager.CustomerService().Login(ctx, &pbc.LoginRequest{UserName: body.Username, Password: body.Password})
 	if err != nil {
 		h.log.Error("error while logging into ", logger.Error(err))
@@ -61,12 +59,12 @@ func (h *handlerV1) Login(c *gin.Context) {
 
 	token := jwthandler.JWTHandler{
 		Sub:       string(user.Id),
-		Role:      "user",
+		Role:      "authorized",
 		Iss:       "customer-api",
 		SigninKey: h.cfg.SigninKey,
 	}
 	fmt.Println("in token ", token.SigninKey)
-	access, refresh, err := token.GenerateAuthJWT()
+	access, _, err := token.GenerateAuthJWT()
 	if err != nil {
 		h.log.Error("error while generating tokens")
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -75,20 +73,24 @@ func (h *handlerV1) Login(c *gin.Context) {
 		return
 	}
 
-	res, err := jwt.Parse(access, func(t *jwt.Token) (interface{}, error) { return []byte(h.cfg.SignKey), nil })
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(res.Claims)
+	// res, err := jwt.Parse(access, func(t *jwt.Token) (interface{}, error) { return []byte(h.cfg.SignKey), nil })
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// fmt.Println(res.Claims)
 
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
-	h.serviceManager.CustomerService().RefreshToken(ctx,
-		&pbc.RefreshTokenRequest{
-			Id:           user.Id,
-			RefreshToken: refresh})
+	// ctx, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	// defer cancel()
+	// h.serviceManager.CustomerService().RefreshToken(ctx,
+	// 	&pbc.RefreshTokenRequest{
+	// 		Id:           user.Id,
+	// 		RefreshToken: refresh})
 
-	user.RefreshToken = refresh
+	user.RefreshToken = access
 	user.PassWord = ""
-	c.JSON(http.StatusOK, user)
+	userResp := models.LoginUser{
+		UserName:    body.Username,
+		AccessToken: access,
+	}
+	c.JSON(http.StatusOK, userResp)
 }

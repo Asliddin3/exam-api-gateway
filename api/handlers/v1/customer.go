@@ -89,7 +89,7 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 	}
 	fmt.Println(claims)
 	fmt.Println(claims.Sub, "===", body.Id)
-	if claims.Sub != body.Id && claims.Role != "admin" {
+	if claims.Sub != body.Id && claims.Role != "admin" && claims.Role != "moderator" {
 		c.JSON(http.StatusForbidden, gin.H{
 			"info": "You haven't access ",
 		})
