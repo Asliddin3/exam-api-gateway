@@ -7,24 +7,26 @@ import (
 )
 
 type Config struct {
-	Environment         string
-	CustomerServiceHost string
-	CustomerServicePort int
-	ReviewServiceHost   string
-	ReviewServicePort   int
-	PostServiceHost     string
-	PostServicePort     int
-	CtxTimeout          int
-	LogLevel            string
-	HTTPPort            string
-	SignKey             string
-	PostgresHost        string
-	PostgresPort        int
-	PostgresUser        string
-	PostgresDB          string
-	PostgresPassword    string
-	AuthConfigPath      string
-	SigninKey           string
+	Environment             string
+	CustomerServiceHost     string
+	CustomerServicePort     int
+	ReviewServiceHost       string
+	ReviewServicePort       int
+	PostServiceHost         string
+	PostServicePort         int
+	CtxTimeout              int
+	LogLevel                string
+	HTTPPort                string
+	SignKey                 string
+	PostgresHost            string
+	PostgresPort            int
+	PostgresUser            string
+	PostgresDB              string
+	PostgresPassword        string
+	AuthConfigPath          string
+	SigninKey               string
+	KAFKA_BROKER_ID         string
+	KAFKA_ZOOKEEPER_CONNECT string
 }
 
 func Load() Config {
@@ -46,7 +48,8 @@ func Load() Config {
 	c.AuthConfigPath = cast.ToString(getOrReturnDefault("AUTH_PATH", "./config/auth.conf"))
 	c.CtxTimeout = cast.ToInt(getOrReturnDefault("CTX_TIMEOUT", 7))
 	c.SignKey = cast.ToString(getOrReturnDefault("SECRET_KEY", "supersecret"))
-	c.SigninKey=cast.ToString(getOrReturnDefault("SIGNIN_KEY","supersecret"))
+	c.SigninKey = cast.ToString(getOrReturnDefault("SIGNIN_KEY", "supersecret"))
+
 	return c
 
 }

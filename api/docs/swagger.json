@@ -11,7 +11,7 @@
         },
         "version": "1.0"
     },
-    "host": "44.202.237.248:8070",
+    "host": "localhost:8070",
     "basePath": "/v1",
     "paths": {
         "/admin": {

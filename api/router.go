@@ -38,7 +38,7 @@ type Option struct {
 // @contact.url    https://t.me/asliddindeh
 // @contact.email  asliddinvstalim@gmail.com
 
-// @host      44.202.237.248:8070
+// @host      localhost:8070
 // @BasePath  /v1
 
 // @securityDefinitions.apikey BearerAuth

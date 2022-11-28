@@ -31,7 +31,6 @@ type HandlerV1Config struct {
 	JwtHandler     jwthandler.JWTHandler
 }
 
-// New ...
 func New(c *HandlerV1Config) *handlerV1 {
 	return &handlerV1{
 		log:            c.Logger,

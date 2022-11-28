@@ -480,7 +480,7 @@ definitions:
       review:
         type: number
     type: object
-host: 44.202.237.248:8070
+host: localhost:8070
 info:
   contact:
     email: asliddinvstalim@gmail.com

@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/Asliddin3/exam-api-gateway/genproto/post"
+	// producer "github.com/Asliddin3/exam-api-gateway/pkg/kafka"
 	"github.com/Asliddin3/exam-api-gateway/pkg/logger"
 	l "github.com/Asliddin3/exam-api-gateway/pkg/logger"
 )
@@ -221,7 +222,7 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("Checking Authorozation", logger.Error(err))
 		return
 	}
-	if claims.Sub != body.CustomerId && claims.Role != "admin" && claims.Role!="moderator"{
+	if claims.Sub != body.CustomerId && claims.Role != "admin" && claims.Role != "moderator" {
 		c.JSON(http.StatusForbidden, gin.H{
 			"info": "You haven't access ",
 		})
@@ -268,6 +269,18 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
+	// post, err := json.Marshal(body)
+
+	fmt.Println(err, body)
+	// err = producer.PushCommentToQueue("post", post)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to send broker message")
+		return
+	}
+
 	response, err := h.serviceManager.PostService().CreatePost(ctx, &body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
