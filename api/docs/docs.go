@@ -194,6 +194,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/customer/post": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "this func create customer with post using kafka",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customer"
+                ],
+                "summary": "create customer with post",
+                "parameters": [
+                    {
+                        "description": "Customer",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customer.CustomerPostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/customer.CustomerPostResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/customer/post/{id}": {
             "get": {
                 "security": [
@@ -837,6 +876,52 @@ const docTemplate = `{
                 }
             }
         },
+        "customer.CustomerPostRequest": {
+            "type": "object",
+            "properties": {
+                "Bio": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "LastName": {
+                    "type": "string"
+                },
+                "Media": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/customer.MediasRequest"
+                    }
+                },
+                "PostDescription": {
+                    "type": "string"
+                },
+                "PostName": {
+                    "type": "string"
+                },
+                "UserName": {
+                    "type": "string"
+                }
+            }
+        },
+        "customer.CustomerPostResponse": {
+            "type": "object",
+            "properties": {
+                "Bio": {
+                    "type": "string"
+                },
+                "CustomerId": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "LastName": {
+                    "type": "string"
+                }
+            }
+        },
         "customer.CustomerRequest": {
             "type": "object",
             "properties": {
@@ -994,6 +1079,20 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/customer.CustomerFullInfo"
                     }
+                }
+            }
+        },
+        "customer.MediasRequest": {
+            "type": "object",
+            "properties": {
+                "Link": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Type": {
+                    "type": "string"
                 }
             }
         },

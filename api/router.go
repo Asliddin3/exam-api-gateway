@@ -12,8 +12,8 @@ import (
 	"github.com/Asliddin3/exam-api-gateway/services"
 	"github.com/Asliddin3/exam-api-gateway/storage/repo"
 	"github.com/casbin/casbin/v2"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -80,6 +80,7 @@ func New(option Option) *gin.Engine {
 	api.DELETE("/customer/delete/:id", handlerV1.DeleteCustomer)
 	api.GET("/customer/post/:id", handlerV1.GetCustomerPostById)
 	api.GET("/customer/:id", handlerV1.GetCustomerInfo)
+	api.POST("/customer/post", handlerV1.CreateCustomerPost)
 	// Post routers
 	// api.GET("/post/page", handlerV1.ListPostForPage)
 	api.GET("/post/:id", handlerV1.GetPost)

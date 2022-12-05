@@ -49,6 +49,36 @@ definitions:
       UpdatedAt:
         type: string
     type: object
+  customer.CustomerPostRequest:
+    properties:
+      Bio:
+        type: string
+      FirstName:
+        type: string
+      LastName:
+        type: string
+      Media:
+        items:
+          $ref: '#/definitions/customer.MediasRequest'
+        type: array
+      PostDescription:
+        type: string
+      PostName:
+        type: string
+      UserName:
+        type: string
+    type: object
+  customer.CustomerPostResponse:
+    properties:
+      Bio:
+        type: string
+      CustomerId:
+        type: string
+      FirstName:
+        type: string
+      LastName:
+        type: string
+    type: object
   customer.CustomerRequest:
     properties:
       Adderesses:
@@ -153,6 +183,15 @@ definitions:
         items:
           $ref: '#/definitions/customer.CustomerFullInfo'
         type: array
+    type: object
+  customer.MediasRequest:
+    properties:
+      Link:
+        type: string
+      Name:
+        type: string
+      Type:
+        type: string
     type: object
   customer.MediasResponse:
     properties:
@@ -619,6 +658,30 @@ paths:
       security:
       - BearerAuth: []
       summary: get all customers
+      tags:
+      - customer
+  /customer/post:
+    post:
+      consumes:
+      - application/json
+      description: this func create customer with post using kafka
+      parameters:
+      - description: Customer
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer.CustomerPostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/customer.CustomerPostResponse'
+      security:
+      - BearerAuth: []
+      summary: create customer with post
       tags:
       - customer
   /customer/post/{id}:

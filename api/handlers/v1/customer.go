@@ -55,6 +55,47 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary create customer with post
+// @Description this func create customer with post using kafka
+// @Security        BearerAuth
+// @Tags customer
+// @Accept json
+// @Produce json
+// @Param customer body customer.CustomerPostRequest true "Customer"
+// @Success 201 {object} customer.CustomerPostResponse
+// @Router /customer/post [post]
+func (h *handlerV1) CreateCustomerPost(c *gin.Context) {
+	var (
+		body        customer.CustomerPostRequest
+		jspbMarshal protojson.MarshalOptions
+	)
+	jspbMarshal.UseProtoNames = true
+	err := c.ShouldBindJSON(&body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to bind json", l.Error(err))
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+	// body.Id = uuid.New().String()
+	response, err := h.serviceManager.CustomerService().CreateCustomerPost(ctx, &body)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to create customer", l.Error(err))
+		return
+	}
+	c.JSON(http.StatusCreated, response)
+}
+
 // @Summary update customers
 // @Description this func update customers
 // @Security        BearerAuth
@@ -171,7 +212,9 @@ func (h *handlerV1) GetListCustomers(c *gin.Context) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
+	h.log.Info("get list method start")
 	response, err := h.serviceManager.CustomerService().GetListCustomers(ctx, &customer.Empty{})
+	h.log.Info("get list method done")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
