@@ -241,8 +241,6 @@ definitions:
     type: object
   models.AdminRequest:
     properties:
-      id:
-        type: integer
       passWord:
         type: string
       userName:

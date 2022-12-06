@@ -1170,9 +1170,6 @@ const docTemplate = `{
         "models.AdminRequest": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "passWord": {
                     "type": "string"
                 },

@@ -56,7 +56,6 @@ func (h *handlerV1) LoginAdmin(c *gin.Context) {
 	}
 	fmt.Println("admin login", h.cfg.SigninKey)
 	token := jwthandler.JWTHandler{
-		Sub:       string(exists.Id),
 		Role:      "admin",
 		Iss:       "admin",
 		SigninKey: "supersecret",

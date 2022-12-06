@@ -16,8 +16,8 @@ func NewAdminRepo(db *sqlx.DB) *adminRepo {
 func (r *adminRepo) LoginAdmin(req *model.AdminRequest) (*model.AdminRequest, error) {
 	adminResp := model.AdminRequest{}
 	err := r.db.QueryRow(`
-	select id,password from admin where username=$1
-	`, req.UserName).Scan(&adminResp.Id, &adminResp.PassWord)
+	select password from admin where username=$1
+	`, req.UserName).Scan(&adminResp.PassWord)
 	if err != nil {
 		return &model.AdminRequest{}, err
 	}

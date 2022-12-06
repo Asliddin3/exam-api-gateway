@@ -8,7 +8,6 @@ type CofirmEmail struct {
 	Password        string
 }
 type AdminRequest struct {
-	Id       int64
 	UserName string
 	PassWord string
 }
