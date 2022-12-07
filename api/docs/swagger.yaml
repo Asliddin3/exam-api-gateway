@@ -48,35 +48,7 @@ definitions:
         type: array
       UpdatedAt:
         type: string
-    type: object
-  customer.CustomerPostRequest:
-    properties:
-      Bio:
-        type: string
-      FirstName:
-        type: string
-      LastName:
-        type: string
-      Media:
-        items:
-          $ref: '#/definitions/customer.MediasRequest'
-        type: array
-      PostDescription:
-        type: string
-      PostName:
-        type: string
       UserName:
-        type: string
-    type: object
-  customer.CustomerPostResponse:
-    properties:
-      Bio:
-        type: string
-      CustomerId:
-        type: string
-      FirstName:
-        type: string
-      LastName:
         type: string
     type: object
   customer.CustomerRequest:
@@ -175,23 +147,10 @@ definitions:
     type: object
   customer.ListCustomers:
     properties:
-      ActiveCustomers:
+      Customers:
         items:
           $ref: '#/definitions/customer.CustomerFullInfo'
         type: array
-      DeletedCustomers:
-        items:
-          $ref: '#/definitions/customer.CustomerFullInfo'
-        type: array
-    type: object
-  customer.MediasRequest:
-    properties:
-      Link:
-        type: string
-      Name:
-        type: string
-      Type:
-        type: string
     type: object
   customer.MediasResponse:
     properties:
@@ -281,8 +240,6 @@ definitions:
     type: object
   models.ModeratorRequest:
     properties:
-      id:
-        type: integer
       passWord:
         type: string
       userName:
@@ -669,14 +626,14 @@ paths:
         name: customer
         required: true
         schema:
-          $ref: '#/definitions/customer.CustomerPostRequest'
+          $ref: '#/definitions/customer.CustomerRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/customer.CustomerPostResponse'
+            $ref: '#/definitions/customer.CustomerResponse'
       security:
       - BearerAuth: []
       summary: create customer with post
@@ -879,14 +836,14 @@ paths:
         name: limit
         required: true
         type: integer
-      - description: parameters
+      - description: parameters (key.value)
         in: path
         items:
           type: string
         name: parameters
         required: true
         type: array
-      - description: orderby
+      - description: orderby (key.value)
         in: path
         name: orderby
         required: true

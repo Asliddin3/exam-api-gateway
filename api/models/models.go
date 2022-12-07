@@ -22,7 +22,6 @@ type LoginUser struct {
 }
 
 type ModeratorRequest struct {
-	Id       int64
 	UserName string
 	PassWord string
 }

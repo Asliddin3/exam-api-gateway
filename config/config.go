@@ -46,7 +46,7 @@ func Load() Config {
 	c.PostgresPassword = cast.ToString(getOrReturnDefault("POSTGRES_PASSWORD", "asliddin2001"))
 	c.PostgresDB = cast.ToString(getOrReturnDefault("POSTGRES_DB", "api"))
 	c.AuthConfigPath = cast.ToString(getOrReturnDefault("AUTH_PATH", "./config/auth.conf"))
-	c.CtxTimeout = cast.ToInt(getOrReturnDefault("CTX_TIMEOUT", 13))
+	c.CtxTimeout = cast.ToInt(getOrReturnDefault("CTX_TIMEOUT", 20))
 	c.SignKey = cast.ToString(getOrReturnDefault("SECRET_KEY", "supersecret"))
 	c.SigninKey = cast.ToString(getOrReturnDefault("SIGNIN_KEY", "supersecret"))
 

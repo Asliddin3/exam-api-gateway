@@ -219,7 +219,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/customer.CustomerPostRequest"
+                            "$ref": "#/definitions/customer.CustomerRequest"
                         }
                     }
                 ],
@@ -227,7 +227,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/customer.CustomerPostResponse"
+                            "$ref": "#/definitions/customer.CustomerResponse"
                         }
                     }
                 }
@@ -563,14 +563,14 @@ const docTemplate = `{
                         "items": {
                             "type": "string"
                         },
-                        "description": "parameters",
+                        "description": "parameters (key.value)",
                         "name": "parameters",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "orderby",
+                        "description": "orderby (key.value)",
                         "name": "orderby",
                         "in": "path",
                         "required": true
@@ -873,51 +873,8 @@ const docTemplate = `{
                 },
                 "UpdatedAt": {
                     "type": "string"
-                }
-            }
-        },
-        "customer.CustomerPostRequest": {
-            "type": "object",
-            "properties": {
-                "Bio": {
-                    "type": "string"
-                },
-                "FirstName": {
-                    "type": "string"
-                },
-                "LastName": {
-                    "type": "string"
-                },
-                "Media": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/customer.MediasRequest"
-                    }
-                },
-                "PostDescription": {
-                    "type": "string"
-                },
-                "PostName": {
-                    "type": "string"
                 },
                 "UserName": {
-                    "type": "string"
-                }
-            }
-        },
-        "customer.CustomerPostResponse": {
-            "type": "object",
-            "properties": {
-                "Bio": {
-                    "type": "string"
-                },
-                "CustomerId": {
-                    "type": "string"
-                },
-                "FirstName": {
-                    "type": "string"
-                },
-                "LastName": {
                     "type": "string"
                 }
             }
@@ -1068,31 +1025,11 @@ const docTemplate = `{
         "customer.ListCustomers": {
             "type": "object",
             "properties": {
-                "ActiveCustomers": {
+                "Customers": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/customer.CustomerFullInfo"
                     }
-                },
-                "DeletedCustomers": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/customer.CustomerFullInfo"
-                    }
-                }
-            }
-        },
-        "customer.MediasRequest": {
-            "type": "object",
-            "properties": {
-                "Link": {
-                    "type": "string"
-                },
-                "Name": {
-                    "type": "string"
-                },
-                "Type": {
-                    "type": "string"
                 }
             }
         },
@@ -1233,9 +1170,6 @@ const docTemplate = `{
         "models.ModeratorRequest": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "passWord": {
                     "type": "string"
                 },

@@ -64,12 +64,12 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 // @Tags customer
 // @Accept json
 // @Produce json
-// @Param customer body customer.CustomerPostRequest true "Customer"
-// @Success 201 {object} customer.CustomerPostResponse
+// @Param customer body customer.CustomerRequest true "Customer"
+// @Success 201 {object} customer.CustomerResponse
 // @Router /customer/post [post]
 func (h *handlerV1) CreateCustomerPost(c *gin.Context) {
 	var (
-		body        customer.CustomerPostRequest
+		body        customer.CustomerRequest
 		jspbMarshal protojson.MarshalOptions
 	)
 	jspbMarshal.UseProtoNames = true

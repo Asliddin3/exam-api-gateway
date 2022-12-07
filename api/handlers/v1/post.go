@@ -301,8 +301,8 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 // @Produce json
 // @Param page path int true "page"
 // @Param limit path int true "limit"
-// @Param parameters path []string true "parameters"
-// @Param orderby path string true "orderby"
+// @Param parameters path []string true "parameters (key.value)"
+// @Param orderby path string true "orderby (key.value)"
 // @Success 200 "success"
 // @Router /post/search/{page}/{limit}/{parameters}/{orderby} [get]
 func (h *handlerV1) SearchPost(c *gin.Context) {

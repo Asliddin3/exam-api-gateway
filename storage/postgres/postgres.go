@@ -28,8 +28,8 @@ func (r *adminRepo) LoginAdmin(req *model.AdminRequest) (*model.AdminRequest, er
 func (r *adminRepo) LoginModerator(req *model.ModeratorRequest) (*model.ModeratorRequest, error) {
 	moderatorResp := model.ModeratorRequest{}
 	err := r.db.QueryRow(`
-	select id,password from moderator where username=$1
-	`, req.UserName).Scan(&moderatorResp.Id, &moderatorResp.PassWord)
+	select password from moderator where username=$1
+	`, req.UserName).Scan(&moderatorResp.PassWord)
 	if err != nil {
 		return &model.ModeratorRequest{}, err
 	}
